@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+
+    /* Navbar / Buttons Blue Theme */
+    --color-primary: #00AEEF;
+    /* Buttons, active links */
+    --color-secondary: rgba(0, 174, 239, 0.06);
+    /* Inactive buttons / subtle highlights */
+    --color-accent: #F97316;
+    /* Product tones (optional) */
+    --color-neutral: #6B6B84;
+    /* Body text */
+    --color-success: #1DBE5E;
+    /* Success messages */
+    --color-warning: #F4C430;
+    /* Warnings / stars */
+    --color-error: #E53935;
+    /* Errors */
+    --color-base-100: #FFFFFF;
+    /* Card / background */
+    --color-base-200: #E5E9F2;
+    /* Card borders / light sections */
+    --color-amber: #F97316;
+    /* Optional accent */
+}
+
+* {
+    font-family: "Poppins", sans-serif;
+}
