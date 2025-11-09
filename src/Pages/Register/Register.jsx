@@ -177,7 +177,7 @@ const Register = () => {
           {/* Google Signin */}
           <button onClick={handleGoogleSignin}
             type="button"
-            className="flex items-center justify-center gap-3 w-full py-2 px-5 bg-pink-100 text-gray-800 rounded-lg font-semibold hover:bg-pink-200 transition-colors"
+            className="flex items-center justify-center gap-3 w-full py-2 px-5 bg-[#00AEEF]/20 text-gray-800 rounded-lg font-semibold hover:bg-blue-200 transition-colors"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -190,7 +190,7 @@ const Register = () => {
           {/* Login Link */}
           <p className="text-center font-semibold pt-5 text-sm sm:text-base">
             Already Have An Account?{" "}
-            <Link className="text-secondary font-bold" to="/auth/login">
+            <Link className=" font-bold text-primary" to="/auth/login">
               Login
             </Link>
           </p>
