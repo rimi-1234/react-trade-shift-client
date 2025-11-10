@@ -1,69 +1,72 @@
-import React, { useRef, useState } from "react";
+import React, { use, useRef, useState } from "react";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../Context/AuthContext";
 
 const AddExportProduct = () => {
+  const { user } = use(AuthContext)
    const [products, setProducts] = useState([]);
   const formRef = useRef();
+ 
+  
 const handleProductSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Collect values from form inputs
-    const name = e.target.name.value;
-    const image = e.target.image.value;
-    const price = e.target.price.value;
-    const origin = e.target.origin.value;
-    const rating = e.target.rating.value;
-    const quantity = e.target.quantity.value;
+  const name = e.target.name.value;
+  const image = e.target.image.value;
+  const price = parseFloat(e.target.price.value);
+  const origin = e.target.origin.value;
+  const rating = parseFloat(e.target.rating.value);
+  const quantity = parseInt(e.target.quantity.value, 10);
+  const created_by = user.email;
+  const createdAt = new Date().toISOString();
 
-    // Add createdAt field
-    const createdAt = new Date().toISOString(); // ISO string format
+  const newProduct = { name, image, price, origin, rating, quantity, createdAt, created_by };
+  
+  const exists = products.some(
+    (product) => product.name.toLowerCase() === name.toLowerCase()
+  );
 
-    const newProduct = { name, image, price, origin, rating, quantity, createdAt };
+  if (exists) {
+    Swal.fire({
+      icon: "warning",
+      title: "Duplicate Product",
+      text: "This product already exists!",
+    });
+    return;
+  }
 
-    const exists = products.some(
-      (product) => product.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (exists) {
-      Swal.fire({
-        icon: "warning",
-        title: "Duplicate Product",
-        text: "This product already exists!",
-      });
-      return; // Stop the submission
-    }
-
-    // POST request example
- fetch("http://localhost:3000/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newProduct),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
-            newProduct._id = data.insertedId;
-            setProducts([newProduct, ...products]); // update state
-            e.target.reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Product has been added!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          formRef.current.reset();
-        }
-      })
-      .catch((err) => {
-        console.error(err);
+  fetch("http://localhost:3000/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // ✅ important
+      authorization: `Bearer ${user.accessToken}`,
+    },
+    body: JSON.stringify(newProduct),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.insertedId) {
+        newProduct._id = data.insertedId;
+        setProducts([newProduct, ...products]);
+        e.target.reset(); // reset form
         Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Failed to add product",
+          position: "top-end",
+          icon: "success",
+          title: "Product has been added!",
+          showConfirmButton: false,
+          timer: 1500,
         });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to add product",
       });
-  };
+    });
+};
 
 
   return (
