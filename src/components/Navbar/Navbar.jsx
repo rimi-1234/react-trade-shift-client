@@ -44,7 +44,7 @@ const Navbar = () => {
                   `px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm md:text-base font-normal transition-all ${
                     isActive
                       ? "bg-[#00AEEF] text-white shadow-md"
-                      : "text-gray-500 hover:bg-[#00AEEF]/20 hover:text-[#00AEEF]"
+                      : "text-gray-700 hover:bg-[#00AEEF]/20 hover:text-white"
                   }`
                 }
               >
