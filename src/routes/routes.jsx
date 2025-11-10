@@ -11,6 +11,7 @@ import ErrorPages from "../Pages/ErrorPages/ErrorPages"
 
 import AddExportProduct from "../Pages/AddExportProduct/AddExportProduct"
 import PrivateRouter from "../Provider/PrivateRouter"
+import AllProduct from "../Pages/AllProduct/AllProduct"
 
 
 const router = createBrowserRouter([
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
       {
         path: '/',
         Component: Home,
+
+      },
+      {
+        path: '/all-products',
+        Component: AllProduct,
 
       },
       {

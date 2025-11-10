@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Swal from "sweetalert2";
 
 const AddExportProduct = () => {
+   const [products, setProducts] = useState([]);
   const formRef = useRef();
-
-  const handleProductSubmit = (e) => {
+const handleProductSubmit = (e) => {
     e.preventDefault();
 
+    // Collect values from form inputs
     const name = e.target.name.value;
     const image = e.target.image.value;
     const price = e.target.price.value;
@@ -14,9 +15,26 @@ const AddExportProduct = () => {
     const rating = e.target.rating.value;
     const quantity = e.target.quantity.value;
 
-    const newProduct = { name, image, price, origin, rating, quantity };
+    // Add createdAt field
+    const createdAt = new Date().toISOString(); // ISO string format
 
-    fetch("http://localhost:3000/products", {
+    const newProduct = { name, image, price, origin, rating, quantity, createdAt };
+
+    const exists = products.some(
+      (product) => product.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (exists) {
+      Swal.fire({
+        icon: "warning",
+        title: "Duplicate Product",
+        text: "This product already exists!",
+      });
+      return; // Stop the submission
+    }
+
+    // POST request example
+ fetch("http://localhost:3000/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newProduct),
@@ -24,6 +42,9 @@ const AddExportProduct = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
+            newProduct._id = data.insertedId;
+            setProducts([newProduct, ...products]); // update state
+            e.target.reset();
           Swal.fire({
             position: "top-end",
             icon: "success",
@@ -44,12 +65,13 @@ const AddExportProduct = () => {
       });
   };
 
+
   return (
     <div className="min-h-screen flex items-center justify-center pt-24 bg-gray-50">
       {/* Centering wrapper */}
       <div className="w-full max-w-3xl p-6 bg-base-100 shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-6 text-center text-primary">
-          Add Export/Product
+          Add Export
         </h2>
 
         <form ref={formRef} onSubmit={handleProductSubmit} className="space-y-6">
