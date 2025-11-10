@@ -106,7 +106,7 @@ const Login = () => {
 
           {/* Forgot Password */}
           <div className="text-right">
-            <Link className="link text-secondary hover:text-primary text-sm sm:text-base"  to="/auth/forgot-password"
+            <Link className="link text-primary text-sm sm:text-base"  to="/auth/forgot-password"
   state={{ email: emailInputValue }} >
               Forgot password?
             </Link>

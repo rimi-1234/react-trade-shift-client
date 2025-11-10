@@ -9,6 +9,9 @@ import Login from "../Pages/Login/Login"
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword"
 import ErrorPages from "../Pages/ErrorPages/ErrorPages"
 
+import AddExportProduct from "../Pages/AddExportProduct/AddExportProduct"
+import PrivateRouter from "../Provider/PrivateRouter"
+
 
 const router = createBrowserRouter([
   {
@@ -20,6 +23,10 @@ const router = createBrowserRouter([
         path: '/',
         Component: Home,
 
+      },
+      {
+        path: "/add-export",
+        element: <PrivateRouter><AddExportProduct></AddExportProduct></PrivateRouter>
       },
 
 

@@ -1,12 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, {use, useState } from "react";
 import { NavLink, Link } from "react-router";
-import { AuthContext } from "../../Context/AuthContext";
+
 import userIcon from "../../assets/user.png";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../Context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, signoutUserFunc, loading } = useContext(AuthContext);
+  const { user, signoutUserFunc, loading } = use(AuthContext);
+  console.log(user);
+  
 
   const handleLogOut = () => {
     signoutUserFunc()
