@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
   } = product;
 
   return (
-    <div className="border rounded-lg shadow-md p-4 max-w-xs mx-auto bg-white hover:shadow-lg transition relative">
+    <div className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative">
       {/* Product Image */}
       <img
         src={image}
