@@ -14,6 +14,7 @@ import PrivateRouter from "../Provider/PrivateRouter"
 import AllProduct from "../Pages/AllProduct/AllProduct"
 import MyExport from "../Pages/MyExport/MyExport"
 import ProductDetails from "../Pages/ProductDetails/ProductDetails"
+import MyImports from "../Pages/MyImports/MyImports"
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "/my-exports",
         element: <PrivateRouter><MyExport></MyExport></PrivateRouter>
+      },
+      {
+        path: "/my-imports",
+        element: <PrivateRouter><MyImports></MyImports></PrivateRouter>
       },
        {
         path: "/products-details/:id",
