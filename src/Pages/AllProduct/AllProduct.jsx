@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import HeroSlider from '../../components/HeroSlider/HeroSlider';
 
 const AllProduct = () => {
     const [products, setProducts] = useState([]);
@@ -10,9 +11,11 @@ const AllProduct = () => {
             .catch((err) => console.error(err));
     }, []);
     return (
-        <div className="pt-40 max-w-[1200px] mx-auto px-2">
+        <div className="pt-24 sm:pt-52 md:pt-52 lg:pt-30 max-w-[1200px] mx-auto px-2">
+
+            <HeroSlider></HeroSlider>
             {/* Top bar: total products + search */}
-            <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+            <div className="flex mt-10 flex-col md:flex-row justify-between items-center mb-4 gap-4">
                 {/* Left side: total products */}
                 <div className="flex items-center flex-1">
                     <span className="text-gray-600  text-2xl font-bold">

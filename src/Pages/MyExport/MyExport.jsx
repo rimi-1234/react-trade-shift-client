@@ -72,15 +72,16 @@ const MyExports = () => {
     const updated = {
       name: form.name.value,
       image: form.image.value,
-      price: form.price.value,
+      price: Number(form.price.value),      // convert to number
       origin: form.origin.value,
-      rating: form.rating.value,
-      quantity: form.quantity.value,
+      rating: Number(form.rating.value),    // convert to number
+      quantity: Number(form.quantity.value) // convert to number
     };
+
     console.log(selectedProduct._id);
-    
+
     console.log(updated);
-    
+
     fetch(`http://localhost:3000/products/${selectedProduct._id}`, {
       method: "put",
       headers: {
@@ -123,7 +124,7 @@ const MyExports = () => {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="max-w-7xl mt-24 mx-auto p-5">
+    <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
       <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
         My Exports
       </h2>

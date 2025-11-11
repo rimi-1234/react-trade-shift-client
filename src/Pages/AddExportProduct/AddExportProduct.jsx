@@ -70,7 +70,7 @@ const handleProductSubmit = (e) => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center pt-24 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center pt-16 sm:pt-52 md:pt-52 lg:pt-40  bg-gray-50">
       {/* Centering wrapper */}
       <div className="w-full max-w-3xl p-6 bg-base-100 shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-6 text-center text-primary">
