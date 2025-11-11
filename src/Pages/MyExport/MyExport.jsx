@@ -157,13 +157,17 @@ const MyExports = () => {
                   />
                 </td>
                 <td className="px-4 py-3 font-semibold">{product.name}</td>
-                <td className="px-4 py-3 font-medium text-gray-700">
+                <td className="px-4 py-3  font-medium text-gray-700">
                   ৳{product.price}
                 </td>
-                <td className="px-4 py-3">{product.origin}</td>
-                <td className="px-4 py-3">{product.rating}</td>
-                <td className="px-4 py-3">{product.quantity}</td>
-                <td className="px-4 py-3 flex flex-col sm:flex-row justify-center gap-2">
+                <td className="px-4 text-center  py-3">{product.origin}</td>
+                <td className="px-4 text-center py-3">{product.rating}</td>
+                  <td className="px-4 py-3">
+                                    <span className="bg-blue-100 flex justify-center text-blue-700 px-3 py-3 rounded-full text-sm font-medium">
+                                        {product.quantity}
+                                    </span>
+                                </td>
+                <td className="px-4 py-6 flex flex-col sm:flex-row justify-center gap-2">
                   <button
                     onClick={() => setSelectedProduct(product)}
                     className="bg-primary text-white px-3 py-2 rounded hover:opacity-90"
@@ -207,7 +211,12 @@ const MyExports = () => {
             </p>
             <p className="text-gray-600">Origin: {product.origin}</p>
             <p className="text-gray-600">Rating: {product.rating}</p>
-            <p className="text-gray-600">Quantity: {product.quantity}</p>
+            <p className="text-gray-600">
+              Quantity:{" "}
+              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                {product.quantity}
+              </span>
+            </p>
 
             <div className="flex justify-between mt-4">
               <button
