@@ -1,12 +1,31 @@
 import React from "react";
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import LatestProducts from "../../components/LatestProducts/LatestProducts";
-
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 const Home = () => {
+  const x = useMotionValue(0);
+  const backgroundPosition = useTransform(x, [0, 100], ["0% 50%", "100% 50%"]);
   return (
     <div>
       <HeroSlider />
+      <div className="flex justify-center items-center h-60 bg-gray-50">
+        <motion.h1
+          className="text-6xl md:text-7xl font-extrabold text-transparent bg-clip-text
+             bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700 px-8 py-6 rounded-3xl"
+          style={{
+            backgroundSize: "200% 200%",
+            backgroundPosition,
+          }}
+          animate={{ x: 100 }}
+          transition={{ x: { repeat: Infinity, repeatType: "loop", duration: 3, ease: "linear" } }}
+        >
+          Welcome to Our Store
+        </motion.h1>
+
+      </div>
+
+
 
       <section className="max-w-6xl mx-auto p-6 mt-10 text-center text-gray-700">
         <h2 className="text-2xl font-bold mb-4">Latest Products</h2>

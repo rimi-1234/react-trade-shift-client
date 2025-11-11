@@ -1,14 +1,19 @@
 import React from "react";
 import { Link } from "react-router";
+import { motion } from "framer-motion";
 
 const ProductCard = ({ product }) => {
-  const { image, name, price, origin, rating, quantity,_id } = product;
-  console.log(_id);
-  
+  const { image, name, price, origin, rating, quantity, _id } = product;
 
   return (
-    <div className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-
+    <motion.div
+      className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white flex flex-col h-full"
+      initial={{ opacity: 0, y: 30 }}          // start slightly below and invisible
+      animate={{ opacity: 1, y: 0 }}           // animate to visible
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      whileHover={{ scale: 1.05, y: -5 }}      // scale up and lift on hover
+      whileTap={{ scale: 0.95 }}               // click feedback
+    >
       {/* Top Content */}
       <div className="flex-1 flex flex-col">
         {/* Product Image */}
@@ -17,8 +22,6 @@ const ProductCard = ({ product }) => {
           alt={name}
           className="w-full h-48 object-contain mb-4 rounded-md"
         />
-
-        {/* Product Name */}
         <h3 className="text-lg font-semibold mb-2">{name}</h3>
 
         {/* Origin Country */}
@@ -34,7 +37,10 @@ const ProductCard = ({ product }) => {
         {/* Rating */}
         <div className="flex items-center mb-2">
           {Array.from({ length: 5 }, (_, i) => (
-            <span key={i} className={i < rating ? "text-yellow-400" : "text-gray-300"}>
+            <span
+              key={i}
+              className={i < rating ? "text-yellow-400" : "text-gray-300"}
+            >
               ★
             </span>
           ))}
@@ -46,15 +52,19 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* See Details Button aligned at the bottom */}
-      <button className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded hover:bg-blue-500 hover:text-white transition">
+      <motion.button
+        className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded transition"
+        whileHover={{ backgroundColor: "#3B82F6", color: "#fff" }} // Tailwind blue-500
+        whileTap={{ scale: 0.95 }}
+      >
         <Link
-          to={`/products-details/${_id}`} // dynamically pass the product/export id
+          to={`/products-details/${_id}`} // dynamically pass the product id
           className="w-full h-full block"
         >
           See Details
         </Link>
-      </button>
-    </div>
+      </motion.button>
+    </motion.div>
   );
 };
 

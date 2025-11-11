@@ -36,3 +36,29 @@
 * {
     font-family: "Poppins", sans-serif;
 }
+
+@keyframes border-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-border-text {
+  background-size: 200% 200%; /* Make the gradient bigger than the text */
+  animation: gradient-move 4s linear infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent; /* Make text take the gradient color */
+}
