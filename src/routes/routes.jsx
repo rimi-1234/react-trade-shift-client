@@ -13,6 +13,7 @@ import AddExportProduct from "../Pages/AddExportProduct/AddExportProduct"
 import PrivateRouter from "../Provider/PrivateRouter"
 import AllProduct from "../Pages/AllProduct/AllProduct"
 import MyExport from "../Pages/MyExport/MyExport"
+import ProductDetails from "../Pages/ProductDetails/ProductDetails"
 
 
 const router = createBrowserRouter([
@@ -38,6 +39,14 @@ const router = createBrowserRouter([
       {
         path: "/my-exports",
         element: <PrivateRouter><MyExport></MyExport></PrivateRouter>
+      },
+       {
+        path: "/products-details/:id",
+        element: (
+          <PrivateRouter>
+            <ProductDetails />
+          </PrivateRouter>
+        ),
       },
 
 

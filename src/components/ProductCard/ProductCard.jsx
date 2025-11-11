@@ -1,11 +1,14 @@
 import React from "react";
+import { Link } from "react-router";
 
 const ProductCard = ({ product }) => {
-  const { image, name, price, origin, rating, quantity } = product;
+  const { image, name, price, origin, rating, quantity,_id } = product;
+  console.log(_id);
+  
 
   return (
     <div className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-      
+
       {/* Top Content */}
       <div className="flex-1 flex flex-col">
         {/* Product Image */}
@@ -44,7 +47,12 @@ const ProductCard = ({ product }) => {
 
       {/* See Details Button aligned at the bottom */}
       <button className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded hover:bg-blue-500 hover:text-white transition">
-        See Details
+        <Link
+          to={`/products-details/${_id}`} // dynamically pass the product/export id
+          className="w-full h-full block"
+        >
+          See Details
+        </Link>
       </button>
     </div>
   );
