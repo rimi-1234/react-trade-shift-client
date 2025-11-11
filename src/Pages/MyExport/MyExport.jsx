@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const MyExports = () => {
   const { user } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const MyExports = () => {
   // ✅ Fetch user’s exports
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/products?email=${user.email}`, {
+      fetch(`http://localhost:3000/exports?email=${user.email}`, {
         headers: {
           authorization: `Bearer ${user.accessToken}`,
         },
@@ -25,29 +25,47 @@ const MyExports = () => {
     }
   }, [user]);
 
-  // ✅ Delete product
+  // ✅ Delete product with SweetAlert2
   const handleDelete = (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
-
-    fetch(`http://localhost:3000/products/${id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          toast.success("Product deleted successfully!");
-          setProducts(products.filter((p) => p._id !== id));
-        } else {
-          toast.error("Failed to delete product.");
-        }
-      })
-      .catch(() => toast.error("Error deleting product."));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This product will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#E53935",
+      cancelButtonColor: "#6B6B84",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/products/${id}`, {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${user.accessToken}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              setProducts(products.filter((p) => p._id !== id));
+              Swal.fire({
+                title: "Deleted!",
+                text: "Product has been deleted successfully.",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false,
+              });
+            } else {
+              Swal.fire("Failed!", "Unable to delete product.", "error");
+            }
+          })
+          .catch(() =>
+            Swal.fire("Error!", "Something went wrong while deleting.", "error")
+          );
+      }
+    });
   };
 
-  // ✅ Update product
+  // ✅ Update product with SweetAlert2
   const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -59,9 +77,12 @@ const MyExports = () => {
       rating: form.rating.value,
       quantity: form.quantity.value,
     };
-
+    console.log(selectedProduct._id);
+    
+    console.log(updated);
+    
     fetch(`http://localhost:3000/products/${selectedProduct._id}`, {
-      method: "PUT",
+      method: "put",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${user.accessToken}`,
@@ -71,18 +92,32 @@ const MyExports = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          toast.success("Product updated!");
           setProducts(
             products.map((p) =>
               p._id === selectedProduct._id ? { ...p, ...updated } : p
             )
           );
           setSelectedProduct(null);
+          Swal.fire({
+            title: "Updated!",
+            text: "Product information has been successfully updated.",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          });
         } else {
-          toast.info("No changes made.");
+          Swal.fire({
+            title: "No Changes",
+            text: "No updates were made.",
+            icon: "info",
+            timer: 1500,
+            showConfirmButton: false,
+          });
         }
       })
-      .catch(() => toast.error("Error updating product."));
+      .catch(() =>
+        Swal.fire("Error!", "Something went wrong while updating.", "error")
+      );
   };
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
@@ -94,13 +129,13 @@ const MyExports = () => {
       </h2>
 
       {/* ✅ Table for larger devices */}
-      <div className="hidden md:block overflow-x-auto shadow-md rounded-lg border border-base-200">
+      <div className="hidden lg:block overflow-x-auto shadow-md rounded-lg border border-base-200">
         <table className="min-w-full divide-y divide-base-200">
           <thead className="bg-base-200">
             <tr className="text-left text-gray-700">
               <th className="px-4 py-3">Image</th>
               <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Price($)</th>
+              <th className="px-4 py-3">Price(৳)</th>
               <th className="px-4 py-3">Origin</th>
               <th className="px-4 py-3">Rating</th>
               <th className="px-4 py-3">Quantity</th>
@@ -121,7 +156,9 @@ const MyExports = () => {
                   />
                 </td>
                 <td className="px-4 py-3 font-semibold">{product.name}</td>
-                <td className="px-4 py-3">${product.price}</td>
+                <td className="px-4 py-3 font-medium text-gray-700">
+                  ৳{product.price}
+                </td>
                 <td className="px-4 py-3">{product.origin}</td>
                 <td className="px-4 py-3">{product.rating}</td>
                 <td className="px-4 py-3">{product.quantity}</td>
@@ -143,6 +180,7 @@ const MyExports = () => {
             ))}
           </tbody>
         </table>
+
         {products.length === 0 && (
           <p className="text-center p-6 text-gray-500">
             No export products found.
@@ -151,7 +189,7 @@ const MyExports = () => {
       </div>
 
       {/* ✅ Mobile Card View */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 h-full lg:hidden gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
         {products.map((product) => (
           <div
             key={product._id}
@@ -163,7 +201,9 @@ const MyExports = () => {
               className="w-full h-40 object-cover rounded-lg mb-3"
             />
             <h3 className="text-lg font-semibold">{product.name}</h3>
-            <p className="text-gray-600">Price: ${product.price}</p>
+            <p className="text-gray-600">
+              Price: <span className="font-medium">৳{product.price}</span>
+            </p>
             <p className="text-gray-600">Origin: {product.origin}</p>
             <p className="text-gray-600">Rating: {product.rating}</p>
             <p className="text-gray-600">Quantity: {product.quantity}</p>
@@ -199,7 +239,11 @@ const MyExports = () => {
                 (field) => (
                   <input
                     key={field}
-                    type={field === "price" || field === "rating" || field === "quantity" ? "number" : "text"}
+                    type={
+                      field === "price" || field === "rating" || field === "quantity"
+                        ? "number"
+                        : "text"
+                    }
                     name={field}
                     defaultValue={selectedProduct[field]}
                     className="border p-2 w-full rounded focus:ring-2 focus:ring-primary outline-none"
