@@ -44,48 +44,18 @@
     font-family: "Poppins", sans-serif;
 }
 
-@keyframes border-move {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes gradient-move {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.animate-border-text {
-  background-size: 200% 200%; /* Make the gradient bigger than the text */
-  animation: gradient-move 4s linear infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent; /* Make text take the gradient color */
-}
 /* Default light theme */
+
+ /* Light theme */
 html[data-theme="light"] {
+  --color-primary: #00AEEF;
   --bg-color: #ffffff;
   --text-color: #000000;
-  --primary-color: #00AEEF;
 }
 
 /* Dark theme */
 html[data-theme="dark"] {
+  --color-primary: #00AEEF; /* or a different shade if you like */
   --bg-color: #1a1a1a;
   --text-color: #ffffff;
-  --primary-color: #00AEEF;
-}
-
-/* Apply variables to body and other elements */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
