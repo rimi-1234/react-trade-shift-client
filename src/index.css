@@ -6,9 +6,16 @@
     themes: light --default;
 }
 
+
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 @plugin "daisyui/theme" {
-    name: "light";
-    default: true;
+  
 
     /* Navbar / Buttons Blue Theme */
     --color-primary: #00AEEF;
@@ -61,4 +68,24 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent; /* Make text take the gradient color */
+}
+/* Default light theme */
+html[data-theme="light"] {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #00AEEF;
+}
+
+/* Dark theme */
+html[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --primary-color: #00AEEF;
+}
+
+/* Apply variables to body and other elements */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

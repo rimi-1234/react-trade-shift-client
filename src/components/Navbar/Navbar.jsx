@@ -1,19 +1,30 @@
-import React, {use, useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavLink, Link } from "react-router";
-
-import userIcon from "../../assets/user.png";
-import { toast } from "react-toastify";
 import { AuthContext } from "../../Context/AuthContext";
+import Switch from "../Switch/Switch";
+import userIcon from "../../assets/user.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, signoutUserFunc, loading } = use(AuthContext);
-  console.log(user);
-  
+  const { user, signoutUserFunc, loading } = useContext(AuthContext);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
+  // Update HTML theme and localStorage
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  // Theme toggle handler
+  const handleTheme = (checked) => {
+    setTheme(checked ? "dark" : "light");
+  };
+
+  // Logout handler
   const handleLogOut = () => {
     signoutUserFunc()
-      .then(() => toast.success("Logout Successful!"))
+      .then(() => setIsOpen(false))
       .catch((error) => console.error(error));
   };
 
@@ -26,59 +37,52 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] z-50 bg-white/30 backdrop-blur-md border border-white/40 rounded-2xl shadow-xl transition-all duration-500">
-      <div className="flex flex-wrap items-center justify-between md:justify-between py-3 px-4 sm:px-6 lg:px-8 gap-3">
-        {/* Left: Logo + Navigation */}
-        <div className="flex flex-wrap items-center gap-4">
-          <Link
-            to="/"
-            className="text-xl sm:text-2xl md:text-3xl font-bold text-primary drop-shadow-md"
-          >
-            TradeShift
-          </Link>
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] z-50 backdrop-blur-md border rounded-2xl shadow-xl transition-all duration-500 bg-white/30 dark:bg-gray-800/70 border-white/40 dark:border-gray-700 text-gray-900 dark:text-white">
+      <div className="flex flex-wrap items-center justify-between py-3 px-4 sm:px-6 lg:px-8 gap-3">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="text-xl sm:text-2xl md:text-3xl font-bold drop-shadow-md text-primary dark:text-white"
+        >
+          TradeShift
+        </Link>
 
-          {/* Desktop + Tablet Links */}
-          <div className="hidden sm:flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
-            {links.map((link, idx) => (
-              <NavLink
-                key={idx}
-                to={link.path}
-                className={({ isActive }) =>
-                  `px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm md:text-base font-normal transition-all ${
-                    isActive
-                      ? "bg-[#00AEEF] text-white shadow-md"
-                      : "text-gray-700 hover:bg-[#00AEEF]/20 hover:text-white"
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </div>
+        {/* Desktop Links */}
+        <div className="hidden sm:flex items-center gap-3">
+          {links.map((link, idx) => (
+            <NavLink
+              key={idx}
+              to={link.path}
+              className={({ isActive }) =>
+                `px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm md:text-base font-normal transition-all ${
+                  isActive
+                    ? "bg-[#00AEEF] text-white shadow-md"
+                    : "hover:bg-[#00AEEF]/20 hover:text-white text-gray-700 dark:text-gray-200"
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
         </div>
 
-        {/* Right: User/Login */}
-        <div className="hidden sm:flex items-center gap-2 sm:gap-3 md:gap-4 ml-auto">
+        {/* Theme Switch */}
+
+        {/* User/Login */}
+        <div className="hidden sm:flex items-center gap-3">
+          <Switch checked={theme === "light"} onChange={(e) => handleTheme(!e.target.checked)} />
           {loading ? (
-            <div className="flex items-center gap-2 text-primary">
-              <span className="loading loading-spinner loading-md"></span>
-              <p className="text-xs sm:text-sm md:text-base">Loading...</p>
-            </div>
+            <p>Loading...</p>
           ) : user ? (
             <>
-              <div className="relative group">
-                <img
-                  src={user?.photoURL || userIcon}
-                  alt="User"
-                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full border-2 border-transparent hover:border-primary cursor-pointer transition-all duration-300"
-                />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 sm:mb-2 bg-primary text-white text-xs sm:text-sm font-semibold px-2 sm:px-3 py-1 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {user.displayName}
-                </span>
-              </div>
+              <img
+                src={user.photoURL || userIcon}
+                alt="User"
+                className="w-10 h-10 rounded-full border-2 border-transparent hover:border-primary cursor-pointer transition"
+              />
               <button
                 onClick={handleLogOut}
-                className="px-3 sm:px-4 md:px-6 py-1 sm:py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold shadow-md transition duration-200 text-xs sm:text-sm md:text-base"
+                className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold"
               >
                 LogOut
               </button>
@@ -86,26 +90,25 @@ const Navbar = () => {
           ) : (
             <Link
               to="/auth/login"
-              className="px-3 sm:px-4 md:px-6 py-1 sm:py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold shadow-md transition duration-200 text-xs sm:text-sm md:text-base"
+              className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold"
             >
-              Login 
+              Login
             </Link>
           )}
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile menu toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="sm:hidden text-3xl font-bold text-primary ml-auto"
-          aria-label="Toggle menu"
+          className="sm:hidden text-3xl font-bold ml-auto"
         >
           ☰
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile Menu */}
       {isOpen && (
-        <div className="sm:hidden bg-white/40 backdrop-blur-md border-t border-white/20 flex flex-col items-center p-4 gap-4 rounded-b-2xl">
+        <div className="sm:hidden flex flex-col items-center p-4 gap-3 rounded-b-2xl border-t bg-white/40 dark:bg-gray-800/80 border-white/30 dark:border-gray-700 text-gray-900 dark:text-white">
           {links.map((link, idx) => (
             <NavLink
               key={idx}
@@ -114,7 +117,7 @@ const Navbar = () => {
                 `w-full text-center px-4 py-2 font-normal transition-all rounded-lg ${
                   isActive
                     ? "bg-[#00AEEF] text-white shadow-md"
-                    : "text-gray-500 hover:bg-[#00AEEF]/20 hover:text-[#00AEEF]"
+                    : "hover:bg-[#00AEEF]/20 hover:text-white text-gray-700 dark:text-gray-200"
                 }`
               }
               onClick={() => setIsOpen(false)}
@@ -123,20 +126,25 @@ const Navbar = () => {
             </NavLink>
           ))}
 
+          {/* Theme Switch in Mobile */}
+          <div className="w-full flex justify-center">
+                   <Switch checked={theme === "light"} onChange={(e) => handleTheme(!e.target.checked)} />
+          </div>
+
           {user ? (
             <button
               onClick={handleLogOut}
-              className="w-full px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold shadow-md"
+              className="w-full px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
             >
               LogOut
             </button>
           ) : (
             <Link
               to="/auth/login"
-              className="w-full text-center px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold shadow-md"
               onClick={() => setIsOpen(false)}
+              className="w-full px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
             >
-              Login 
+              Login
             </Link>
           )}
         </div>
