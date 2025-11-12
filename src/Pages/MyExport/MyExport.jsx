@@ -1,12 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import Swal from "sweetalert2";
+import useTitle from "../../hooks/useTitle";
 
 const MyExports = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  useTitle(
+    selectedProduct
+      ? `Editing: ${selectedProduct.name} | MyExports`
+      : `MyExports (${products.length}) | TradeShift`
+  );
 
   // ✅ Fetch user’s exports
   useEffect(() => {
@@ -126,7 +132,7 @@ const MyExports = () => {
   return (
     <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
       <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
-        My Exports
+        My Exports({products.length})
       </h2>
 
       {/* ✅ Table for larger devices */}
@@ -162,11 +168,11 @@ const MyExports = () => {
                 </td>
                 <td className="px-4 text-center  py-3">{product.origin}</td>
                 <td className="px-4 text-center py-3">{product.rating}</td>
-                  <td className="px-4 py-3">
-                                    <span className="bg-blue-100 flex justify-center text-blue-700 px-3 py-3 rounded-full text-sm font-medium">
-                                        {product.quantity}
-                                    </span>
-                                </td>
+                <td className="px-4 py-3">
+                  <span className="bg-blue-100 flex justify-center text-blue-700 px-3 py-3 rounded-full text-sm font-medium">
+                    {product.quantity}
+                  </span>
+                </td>
                 <td className="px-4 py-6 flex flex-col sm:flex-row justify-center gap-2">
                   <button
                     onClick={() => setSelectedProduct(product)}

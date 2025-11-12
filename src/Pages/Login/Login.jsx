@@ -7,7 +7,7 @@ import { IoEyeOff } from "react-icons/io5";
 import useTitle from "../../hooks/useTitle";
 
 const Login = () => {
-  useTitle("Login | ToyVerse");
+  useTitle("Login | TradeShift");
   const [show, setShow] = useState(false);
   const [emailInputValue, setEmailInputValue] = useState("");
 

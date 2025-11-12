@@ -49,7 +49,7 @@ const MyImports = () => {
     return (
         <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
             <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
-                My Imports
+                My Imports({imports.length})
             </h2>
 
             {/* Table view for desktop */}
@@ -62,7 +62,12 @@ const MyImports = () => {
                             <th className="px-4 py-3">Price(৳)</th>
                             <th className="px-4 py-3">Origin</th>
                             <th className="px-4 py-3">Rating</th>
-                            <th className="px-4 py-3">Imported Quantity</th>
+                            <th className="px-5 py-3">
+                                <div className="flex justify-center gap-1">
+                                    <span>Imported</span>
+                                    <span>Quantity</span>
+                                </div>
+                            </th>
                             <th className="px-4 py-3 text-center">Actions</th>
                         </tr>
                     </thead>
@@ -80,74 +85,81 @@ const MyImports = () => {
                                 <td className="px-4 py-3 font-medium text-gray-700">৳{product.price}</td>
                                 <td className="px-4 text-center  py-3">{product.origin}</td>
                                 <td className="px-4 text-center  py-3">{product.rating}</td>
-                                <td className="px-4  py-4">
+                                <td className="px-4  py-3">
                                     <span className="bg-blue-100 flex justify-center h-full text-blue-700 px-3 py-3 rounded-full text-sm font-medium">
                                         {product.importedQuantity}
                                     </span>
                                 </td>
-                                <td className="px-4 py-6 flex flex-col sm:flex-row justify-center gap-2">
+
+                                <td className="px-4 py-6 flex flex-col sm:flex-row justify-center items-center gap-2">
                                     <button
                                         onClick={() => navigate(`/products-details/${product.productId}`)}
-                                        className="bg-primary text-white px-3 py-2 rounded hover:opacity-90"
+                                        className="flex-1 w-full sm:w-auto justify-center bg-primary text-white px-4 py-2 rounded-lg hover:opacity-90 flex transition-all duration-200"
                                     >
-                                        See Details
+                                        <span className="flex gap-2 items-center text-center">    <span>See</span>
+                                    <span>Details</span></span>
                                     </button>
+
                                     <button
                                         onClick={() => handleDelete(product._id)}
-                                        className="bg-error text-white px-3 py-2 rounded hover:opacity-90"
+                                        className="flex-1 w-full sm:w-auto justify-center bg-error text-white px-4 py-2 rounded-lg hover:opacity-90 flex transition-all duration-200"
                                     >
-                                        Remove
+                                        <span className="flex-1 text-center">Remove</span>
                                     </button>
-                                </td>
+                               
+
+
+
+                            </td>
                             </tr>
                         ))}
-                    </tbody>
-                </table>
+                </tbody>
+            </table>
 
-                {imports.length === 0 && (
-                    <p className="text-center p-6 text-gray-500">No imported products found.</p>
-                )}
-            </div>
-
-            {/* Mobile Card View */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
-                {imports.map((product) => (
-                    <div key={product._id} className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm">
-                        <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-40 object-cover rounded-lg mb-3"
-                        />
-                        <h3 className="text-lg font-semibold">{product.name}</h3>
-                        <p className="text-gray-600">Price: <span className="font-medium">৳{product.price}</span></p>
-                        <p className="text-gray-600">Origin: {product.origin}</p>
-                        <p className="text-gray-600">Rating: {product.rating}</p>
-                        <p className="text-gray-600">
-                            Quantity:{" "}
-                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                                {product.importedQuantity}
-                            </span>
-                        </p>
-
-
-                        <div className="flex justify-between mt-4">
-                            <button
-                                onClick={() => navigate(`/products-details/${product.productId}`)}
-                                className="bg-primary text-white px-3 py-2 rounded hover:opacity-90 flex-1 mr-2"
-                            >
-                                See Details
-                            </button>
-                            <button
-                                onClick={() => handleDelete(product._id)}
-                                className="bg-error text-white px-3 py-2 rounded hover:opacity-90 flex-1 ml-2"
-                            >
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {imports.length === 0 && (
+                <p className="text-center p-6 text-gray-500">No imported products found.</p>
+            )}
         </div>
+
+            {/* Mobile Card View */ }
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
+        {imports.map((product) => (
+            <div key={product._id} className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm">
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-40 object-cover rounded-lg mb-3"
+                />
+                <h3 className="text-lg font-semibold">{product.name}</h3>
+                <p className="text-gray-600">Price: <span className="font-medium">৳{product.price}</span></p>
+                <p className="text-gray-600">Origin: {product.origin}</p>
+                <p className="text-gray-600">Rating: {product.rating}</p>
+                <p className="text-gray-600">
+                    Quantity:{" "}
+                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                        {product.importedQuantity}
+                    </span>
+                </p>
+
+
+                <div className="flex justify-between mt-4">
+                    <button
+                        onClick={() => navigate(`/products-details/${product.productId}`)}
+                        className="bg-primary text-white px-3 py-2 rounded hover:opacity-90 flex-1 mr-2"
+                    >
+                        See Details
+                    </button>
+                    <button
+                        onClick={() => handleDelete(product._id)}
+                        className="bg-error text-white px-3 py-2 rounded hover:opacity-90 flex-1 ml-2"
+                    >
+                        Remove
+                    </button>
+                </div>
+            </div>
+        ))}
+    </div>
+        </div >
     );
 };
 

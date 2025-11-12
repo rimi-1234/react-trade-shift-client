@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router";
 import useTitle from "../../hooks/useTitle";
 
 const ForgotPassword = () => {
-    useTitle("ForgotPassword | ToyVerse");
+    useTitle("ForgotPassword | TradeShift");
   const { sendPasswordResetEmailFunc } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();

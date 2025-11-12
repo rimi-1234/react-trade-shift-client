@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import { Search } from "lucide-react";
+import useTitle from "../../hooks/useTitle";
 
 const AllProduct = () => {
+  useTitle("AllProduct | TradeShift");
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(false);

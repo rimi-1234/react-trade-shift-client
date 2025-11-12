@@ -7,7 +7,7 @@ import { IoEyeOff } from "react-icons/io5";
 import useTitle from "../../hooks/useTitle";
 
 const Register = () => {
-  useTitle("Register | ToyVerse");
+  useTitle("Register | TradeShift");
   const navigate = useNavigate();
   const {
     createUserWithEmailAndPasswordFunc,

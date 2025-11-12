@@ -3,8 +3,10 @@ import { useParams } from "react-router";
 import { AuthContext } from "../../Context/AuthContext";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
+import useTitle from "../../hooks/useTitle";
 
 function ProductDetails() {
+  useTitle("ProductDetails | TradeShift");
   const { id } = useParams();
   const { user } = useContext(AuthContext);
 
@@ -139,8 +141,8 @@ function ProductDetails() {
 
           <motion.button
             onClick={() => setModalOpen(true)}
-            className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-            whileHover={{ scale: 1.05 }}
+            className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded transition"
+            whileHover={{ backgroundColor: "#3B82F6", color: "#fff" }} // Tailwind blue-500
             whileTap={{ scale: 0.95 }}
           >
             Import Now
@@ -182,11 +184,10 @@ function ProductDetails() {
               <button
                 onClick={handleImport}
                 disabled={!isQuantityValid || loading}
-                className={`w-full py-2 rounded-lg ${
-                  !isQuantityValid || loading
+                className={`w-full py-2 rounded-lg ${!isQuantityValid || loading
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-500 text-white hover:bg-green-600"
-                }`}
+                  }`}
               >
                 {loading ? "Processing..." : "Submit"}
               </button>

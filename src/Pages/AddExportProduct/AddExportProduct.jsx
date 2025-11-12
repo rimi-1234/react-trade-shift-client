@@ -1,8 +1,10 @@
 import React, { use, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/AuthContext";
+import useTitle from "../../hooks/useTitle";
 
 const AddExportProduct = () => {
+  useTitle("AddExportProduct | TradeShift");
   const { user } = use(AuthContext)
    const [products, setProducts] = useState([]);
   const formRef = useRef();

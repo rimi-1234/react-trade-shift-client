@@ -9,7 +9,7 @@ import useTitle from '../../hooks/useTitle';
 
 const ErrorPages = () => {
     
-    useTitle("ErrorPages | ToyVerse");
+     useTitle("ErrorPages | TradeShift");
     let navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     useEffect(() => {
