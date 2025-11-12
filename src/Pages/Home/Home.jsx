@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <div>
       <HeroSlider />
-      <div className="flex justify-center items-center h-60 bg-gray-50">
+      <div className="flex justify-center items-center h-60 bg-blue-100">
         <motion.h1
           className="text-6xl md:text-7xl font-extrabold text-transparent bg-clip-text
              bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700 px-8 py-6 rounded-3xl"
@@ -27,7 +27,7 @@ const Home = () => {
 
 
 
-      <section className="max-w-6xl mx-auto p-6 mt-10 text-center text-gray-700">
+      <section className="max-w-6xl mx-auto p-6 mt-5 text-center text-gray-700">
         <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
         <p>
           Explore our latest import and export collections curated for your

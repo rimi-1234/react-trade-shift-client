@@ -14,6 +14,8 @@ const ProductCard = ({ product }) => {
       whileHover={{ scale: 1.05, y: -5 }}      // scale up and lift on hover
       whileTap={{ scale: 0.95 }}               // click feedback
     >
+   
+
       {/* Top Content */}
       <div className="flex-1 flex flex-col">
         {/* Product Image */}
