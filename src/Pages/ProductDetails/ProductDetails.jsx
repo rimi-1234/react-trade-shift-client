@@ -9,7 +9,7 @@ import Loading from "../../components/Loading/Loading";
 
 function ProductDetails() {
   useTitle("Product Details | TradeShift");
-      let navigate = useNavigate();
+  let navigate = useNavigate();
   const { id } = useParams();
   const { user } = useContext(AuthContext);
 
@@ -34,23 +34,23 @@ products/${id}`)
   }, [id]);
 
   if (loading) return <p className="text-center mt-10"><Loading></Loading></p>;
- 
 
-      if (!product) 
-     return(
-        <>
-            <div className="flex flex-col items-center justify-center h-screen text-center">
-                <img
-                    src={errorImg}  // your error image in `public/` folder
-                    alt="Error"
-                    className="w-96 h-96 mb-6"
-                />
-                <h2 className="text-5xl font-bold  mb-2">Oops, app not found!</h2>
-                <p className="text-gray-500 text-xl py-2">The app you are looking for is not available.</p>
-                <button onClick={() => navigate(-1)} className="btn mr-3 mt-3 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] text-white"><span></span>Go Back!</button>
-            </div>
-        </>
-     );
+
+  if (!product)
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center h-screen text-center">
+          <img
+            src={errorImg}  // your error image in `public/` folder
+            alt="Error"
+            className="w-96 h-96 mb-6"
+          />
+          <h2 className="text-5xl font-bold  mb-2">Oops, app not found!</h2>
+          <p className="text-gray-500 text-xl py-2">The app you are looking for is not available.</p>
+          <button onClick={() => navigate(-1)} className="btn mr-3 mt-3 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] text-white"><span></span>Go Back!</button>
+        </div>
+      </>
+    );
 
   // Validate quantity input
   const isQuantityValid = quantity > 0 && quantity <= product.quantity;
@@ -157,11 +157,12 @@ imports/${id}`, {
             <p className="text-gray-700 mb-1">
               <span className="font-semibold">Origin:</span> {product.origin}
             </p>
-            <p className="flex items-center text-yellow-400 mt-2">
+            <p className="flex items-center text-yellow-400 mt-2 text-2xl">
               {"★".repeat(product.rating)}
               {"☆".repeat(5 - product.rating)}
-              <span className="ml-2 text-gray-700 font-semibold">{product.rating}</span>
+              <span className="ml-2 text-gray-700 font-semibold text-base">{product.rating}</span>
             </p>
+
           </div>
 
           <motion.button
@@ -210,8 +211,8 @@ imports/${id}`, {
                 onClick={handleImport}
                 disabled={!isQuantityValid || loading}
                 className={`w-full py-2 rounded-lg ${!isQuantityValid || loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-500 text-white hover:bg-green-600"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-500 text-white hover:bg-green-600"
                   }`}
               >
                 {loading ? "Processing..." : "Submit"}

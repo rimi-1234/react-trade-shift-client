@@ -10,7 +10,6 @@ const MyExports = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch user’s exports
 
   useTitle(
     selectedProduct
@@ -32,10 +31,10 @@ const MyExports = () => {
       .catch(() => {
         Swal.fire("Error!", "Failed to load your exports.", "error");
       })
-      .finally(() => setLoading(false)); // ✅ always end loading here
+      .finally(() => setLoading(false)); 
   }, [user]);
 
-  // ✅ Delete product
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

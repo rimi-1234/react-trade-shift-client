@@ -30,10 +30,9 @@ const Home = () => {
 
   return (
     <div>
-      {/* Hero slider */}
+  
       <HeroSlider />
 
-      {/* Animated heading */}
       <div className="flex justify-center items-center h-60 sm:h-72 md:h-96 lg:h-[300px] bg-blue-100 px-4 sm:px-6 md:px-12 overflow-hidden">
         <motion.h1
           className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-transparent bg-clip-text
@@ -48,7 +47,6 @@ const Home = () => {
         </motion.h1>
       </div>
 
-      {/* Latest products section */}
       <section className="max-w-6xl mx-auto p-6 mt-5 text-center text-gray-700">
         <h2 className="text-2xl font-bold  dark:text-gray-400 mb-4">Latest Products</h2>
         <p className="mb-6 dark:text-gray-400">
@@ -91,7 +89,7 @@ const Home = () => {
             spaceBetween={20}
             slidesPerView={1}
           >
-            {/* Divide products into groups of 5 */}
+      
             {Array.from({ length: Math.ceil(products.length / 5) }).map((_, idx) => {
               const group = products.slice(idx * 5, idx * 5 + 5);
               return (

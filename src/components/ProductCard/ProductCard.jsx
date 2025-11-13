@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
         </p>
 
         {/* Rating */}
-        <div className="flex items-center mb-2">
+        <div className="flex items-center mb-2 text-2xl">
           {Array.from({ length: 5 }, (_, i) => (
             <span
               key={i}
@@ -46,8 +46,9 @@ const ProductCard = ({ product }) => {
               ★
             </span>
           ))}
-          <span className="ml-2 text-sm text-gray-600">{rating}</span>
+          <span className="ml-2 text-base text-gray-600">{rating}</span>
         </div>
+
 
         {/* Price */}
         <p className="text-red-600 font-bold text-lg mb-4">৳{price}</p>

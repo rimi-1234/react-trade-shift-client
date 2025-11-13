@@ -39,7 +39,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1400px] z-50 backdrop-blur-md border rounded-2xl shadow-xl transition-all duration-500 bg-white/30 dark:bg-gray-800/70 border-white/40 dark:border-gray-700 text-gray-900 dark:text-white">
-      <div className="flex flex-wrap items-center justify-between py-3 px-4 sm:px-6 lg:px-8 gap-2">
+      <div className="flex flex-wrap  items-center justify-between py-3 px-4 sm:px-6 lg:px-8 gap-2">
         {/* Left: Logo + Navigation */}
         <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <Link
