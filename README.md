@@ -1,16 +1,35 @@
-# React + Vite
+# 🛍️ TradeShift
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**TradeShift** is a modern and responsive e-commerce web platform designed to provide a seamless online shopping experience.  
+It allows users to explore products, view detailed information, manage their accounts, and make purchases efficiently.
 
-Currently, two official plugins are available:
+🌐 **Live Site URL:** [https://tradeshift.vercel.app](https://tradeshift.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🧭 **Dynamic Product Browsing:** Browse through a wide range of products with category-based filtering and sorting options.
+- 🔍 **Interactive Search System:** Instantly find products using a responsive and fast search bar with real-time suggestions.
+- 📱 **Fully Responsive Design:** Optimized for all devices — from large desktops to mobile screens.
+- 👤 **User Authentication:** Secure login and registration with email/password and social media integrations.
+- 🛒 **Product Management:** Users can view product details, add items to the cart, and proceed to checkout.
+- 💬 **User Feedback:** Integrated review and rating system to help users make informed purchase decisions.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Technologies Used
+
+- **Frontend:** React.js, Tailwind CSS, Framer Motion, DaisyUI  
+- **Backend:** Node.js, Express.js  
+- **Database:** MongoDB  
+- **Authentication:** Firebase Authentication  
+- **Hosting:** Vercel (Client) & Render (Server)
+
+---
+
+## 🚀 How to Run Locally
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-username/tradeshift.git

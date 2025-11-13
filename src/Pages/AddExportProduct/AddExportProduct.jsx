@@ -2,74 +2,83 @@ import React, { use, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/AuthContext";
 import useTitle from "../../hooks/useTitle";
+import Loading from "../../components/Loading/Loading";
 
 const AddExportProduct = () => {
   useTitle("AddExportProduct | TradeShift");
   const { user } = use(AuthContext)
-   const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const formRef = useRef();
- 
-  
-const handleProductSubmit = (e) => {
-  e.preventDefault();
+  const [loading, setLoading] = useState(false);
 
-  const name = e.target.name.value;
-  const image = e.target.image.value;
-  const price = parseFloat(e.target.price.value);
-  const origin = e.target.origin.value;
-  const rating = parseFloat(e.target.rating.value);
-  const quantity = parseInt(e.target.quantity.value, 10);
-  const created_by = user.email;
-  const createdAt = new Date().toISOString();
 
-  const newProduct = { name, image, price, origin, rating, quantity, createdAt, created_by };
-  
-  const exists = products.some(
-    (product) => product.name.toLowerCase() === name.toLowerCase()
-  );
+  const handleProductSubmit = (e) => {
+    e.preventDefault();
 
-  if (exists) {
-    Swal.fire({
-      icon: "warning",
-      title: "Duplicate Product",
-      text: "This product already exists!",
-    });
-    return;
-  }
+    const name = e.target.name.value;
+    const image = e.target.image.value;
+    const price = parseFloat(e.target.price.value);
+    const origin = e.target.origin.value;
+    const rating = parseFloat(e.target.rating.value);
+    const quantity = parseInt(e.target.quantity.value, 10);
+    const created_by = user.email;
+    const createdAt = new Date().toISOString();
 
-  fetch("http://localhost:3000/products", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json", // ✅ important
-      authorization: `Bearer ${user.accessToken}`,
-    },
-    body: JSON.stringify(newProduct),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.insertedId) {
-        newProduct._id = data.insertedId;
-        setProducts([newProduct, ...products]);
-        e.target.reset(); // reset form
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Product has been added!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    })
-    .catch((err) => {
-      console.error(err);
+    const newProduct = { name, image, price, origin, rating, quantity, createdAt, created_by };
+
+    const exists = products.some(
+      (product) => product.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (exists) {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Failed to add product",
+        icon: "warning",
+        title: "Duplicate Product",
+        text: "This product already exists!",
       });
-    });
-};
+      return;
+    }
+    setLoading(true);
 
+    fetch("https://react-trade-shift-server.vercel.app/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // ✅ important
+        authorization: `Bearer ${user.accessToken}`,
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          newProduct._id = data.insertedId;
+          setProducts([newProduct, ...products]);
+          e.target.reset(); // reset form
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Product has been added!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Failed to add product",
+        });
+      });
+    setLoading(false);
+  };
+  if (loading)
+    return (
+      <p className="text-center mt-10">
+        <Loading></Loading>
+      </p>
+    );
 
   return (
     <div className="min-h-screen flex items-center justify-center pt-16 sm:pt-52 md:pt-52 lg:pt-40  bg-gray-50">

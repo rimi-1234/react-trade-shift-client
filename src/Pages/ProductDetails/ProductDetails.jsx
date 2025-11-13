@@ -4,6 +4,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
 import useTitle from "../../hooks/useTitle";
+import Loading from "../../components/Loading/Loading";
 
 function ProductDetails() {
   useTitle("ProductDetails | TradeShift");
@@ -18,7 +19,10 @@ function ProductDetails() {
   // Fetch product details
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:3000/products/${id}`)
+    fetch(`https://react-trade-shift-server.vercel.app/
+
+
+products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
@@ -27,7 +31,7 @@ function ProductDetails() {
       .catch(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (loading) return <p className="text-center mt-10"><Loading></Loading></p>;
   if (!product) return <p className="text-center mt-10">Product not found.</p>;
 
   // Validate quantity input
@@ -49,7 +53,10 @@ function ProductDetails() {
     };
 
     setLoading(true);
-    fetch(`http://localhost:3000/imports/${id}`, {
+    fetch(`https://react-trade-shift-server.vercel.app/
+
+
+imports/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

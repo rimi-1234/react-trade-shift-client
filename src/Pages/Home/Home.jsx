@@ -9,13 +9,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import Loading from "../../components/Loading/Loading";
+import NewsletterBanner from "../../components/NewsletterBanner/NewsletterBanner";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   useTitle("Home | TradeShift");
 
   useEffect(() => {
-    fetch("http://localhost:3000/best-products")
+    fetch("https://react-trade-shift-server.vercel.app/best-products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Fetch error:", err));
@@ -65,7 +66,7 @@ const Home = () => {
         </p>
 
         {/* Category slider */}
-        <div className="relative w-full p-4 bg-blue-100 mt-8">
+        <div className="relative w-full p-4 mb-7 bg-blue-100 mt-8">
           {/* Custom nav buttons */}
           <div className="absolute inset-y-0 -left-5 flex items-center z-10">
             <button className="swiper-button-prev-custom bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 w-12 h-12 flex justify-center items-center">
@@ -111,6 +112,8 @@ const Home = () => {
           </Swiper>
         </div>
       </section>
+      <NewsletterBanner></NewsletterBanner>
+
     </div>
   );
 };

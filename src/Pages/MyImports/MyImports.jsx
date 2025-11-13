@@ -3,24 +3,36 @@ import { useNavigate } from "react-router";
 
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/AuthContext";
+import Loading from "../../components/Loading/Loading";
+import useTitle from "../../hooks/useTitle";
 
 const MyImports = () => {
+      useTitle("MyImports | TradeShift");
     const [imports, setImports] = useState([]);
     ;
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
-
+     const [loading, setLoading] = useState(true);
+     
+  
     // Fetch user's imports
     useEffect(() => {
         console.log(user.email);
+          setLoading(true)
 
-        fetch(`http://localhost:3000/imports?email=${user.email}`, {
+        fetch(`https://react-trade-shift-server.vercel.app/
+
+
+imports?email=${user.email}`, {
             headers: {
                 authorization: `Bearer ${user.accessToken}`,
             },
         })
             .then(res => res.json())
-            .then(data => setImports(data))
+            .then(data =>{ setImports(data)
+
+                 setLoading(false);
+            })
             .catch(err => console.error(err));
     }, [user.email]);
 
@@ -36,7 +48,10 @@ const MyImports = () => {
 
         if (confirmed.isConfirmed) {
             try {
-                await fetch(`http://localhost:3000/imports/${id}`, { method: "DELETE" });
+                await fetch(`https://react-trade-shift-server.vercel.app/
+
+
+imports/${id}`, { method: "DELETE" });
                 setImports(imports.filter(item => item._id !== id));
                 Swal.fire("Deleted!", "Your import has been removed.", "success");
             } catch (err) {
@@ -45,11 +60,19 @@ const MyImports = () => {
             }
         }
     };
+    // ✅ Loading state display
+  if (loading)
+    return (
+      <p className="text-center mt-10">
+       <Loading></Loading>
+      </p>
+    );
+    
 
     return (
         <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
             <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
-                My Imports({imports.length})
+                My Imports({imports?.length})
             </h2>
 
             {/* Table view for desktop */}
@@ -72,7 +95,8 @@ const MyImports = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                        {imports.map((product) => (
+
+                        {Array.isArray(imports) && imports?.map((product) => (
                             <tr key={product._id} className="hover:bg-base-100 transition-colors">
                                 <td className="px-4 py-3">
                                     <img
@@ -97,7 +121,7 @@ const MyImports = () => {
                                         className="flex-1 w-full sm:w-auto justify-center bg-primary text-white px-4 py-2 rounded-lg hover:opacity-90 flex transition-all duration-200"
                                     >
                                         <span className="flex gap-2 items-center text-center">    <span>See</span>
-                                    <span>Details</span></span>
+                                            <span>Details</span></span>
                                     </button>
 
                                     <button
@@ -106,59 +130,65 @@ const MyImports = () => {
                                     >
                                         <span className="flex-1 text-center">Remove</span>
                                     </button>
-                               
 
 
 
-                            </td>
+
+                                </td>
                             </tr>
                         ))}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-            {imports.length === 0 && (
-                <p className="text-center p-6 text-gray-500">No imported products found.</p>
-            )}
-        </div>
-
-            {/* Mobile Card View */ }
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
-        {imports.map((product) => (
-            <div key={product._id} className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm">
-                <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-40 object-cover rounded-lg mb-3"
-                />
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-gray-600">Price: <span className="font-medium">৳{product.price}</span></p>
-                <p className="text-gray-600">Origin: {product.origin}</p>
-                <p className="text-gray-600">Rating: {product.rating}</p>
-                <p className="text-gray-600">
-                    Quantity:{" "}
-                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                        {product.importedQuantity}
-                    </span>
-                </p>
-
-
-                <div className="flex justify-between mt-4">
-                    <button
-                        onClick={() => navigate(`/products-details/${product.productId}`)}
-                        className="bg-primary text-white px-3 py-2 rounded hover:opacity-90 flex-1 mr-2"
-                    >
-                        See Details
-                    </button>
-                    <button
-                        onClick={() => handleDelete(product._id)}
-                        className="bg-error text-white px-3 py-2 rounded hover:opacity-90 flex-1 ml-2"
-                    >
-                        Remove
-                    </button>
-                </div>
+       {Array.isArray(imports) &&imports?.length === 0 && (
+                    <p className="text-center p-6 text-gray-500">No imported products found.</p>
+                )}
             </div>
-        ))}
-    </div>
+
+            {/* Mobile Card View */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
+             {Array.isArray(imports) &&imports?.map((product) => (
+                    <div
+                        key={product._id}
+                        className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm flex flex-col h-full"
+                    >
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-40 object-cover rounded-lg mb-3 flex-shrink-0"
+                        />
+                        <h3 className="text-lg font-semibold mb-1">{product.name}</h3>
+                        <p className="text-gray-600 mb-1">
+                            Price: <span className="font-medium">৳{product.price}</span>
+                        </p>
+                        <p className="text-gray-600 mb-1">Origin: {product.origin}</p>
+                        <p className="text-gray-600 mb-1">Rating: {product.rating}</p>
+                        <p className="text-gray-600 mb-3">
+                            Quantity:{" "}
+                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                                {product.importedQuantity}
+                            </span>
+                        </p>
+
+                        {/* Buttons pushed to bottom */}
+                        <div className="flex gap-2 mt-auto">
+                            <button
+                                onClick={() => navigate(`/products-details/${product.productId}`)}
+                                className="flex-1 bg-primary text-white px-3 py-2 rounded hover:opacity-90"
+                            >
+                                See Details
+                            </button>
+                            <button
+                                onClick={() => handleDelete(product._id)}
+                                className="flex-1 bg-error text-white px-3 py-2 rounded hover:opacity-90"
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
         </div >
     );
 };

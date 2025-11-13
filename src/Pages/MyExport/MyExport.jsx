@@ -2,36 +2,40 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import Swal from "sweetalert2";
 import useTitle from "../../hooks/useTitle";
+import Loading from "../../components/Loading/Loading";
 
 const MyExports = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch user’s exports
+
   useTitle(
     selectedProduct
       ? `Editing: ${selectedProduct.name} | MyExports`
       : `MyExports (${products.length}) | TradeShift`
   );
-
-  // ✅ Fetch user’s exports
   useEffect(() => {
-    if (user?.email) {
-      fetch(`http://localhost:3000/exports?email=${user.email}`, {
-        headers: {
-          authorization: `Bearer ${user.accessToken}`,
-        },
+
+    if (!user?.email) return;
+
+    setLoading(true);
+    fetch(`https://react-trade-shift-server.vercel.app/exports?email=${user.email}`, {
+      headers: {
+        authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch(() => {
+        Swal.fire("Error!", "Failed to load your exports.", "error");
       })
-        .then((res) => res.json())
-        .then((data) => {
-          setProducts(data);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    }
+      .finally(() => setLoading(false)); // ✅ always end loading here
   }, [user]);
 
-  // ✅ Delete product with SweetAlert2
+  // ✅ Delete product
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -42,54 +46,53 @@ const MyExports = () => {
       cancelButtonColor: "#6B6B84",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://localhost:3000/products/${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${user.accessToken}`,
-          },
+      if (!result.isConfirmed) return;
+
+      setLoading(true);
+      fetch(`https://react-trade-shift-server.vercel.app/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+            setProducts((prev) => prev.filter((p) => p._id !== id));
+            Swal.fire({
+              title: "Deleted!",
+              text: "Product has been deleted successfully.",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          } else {
+            Swal.fire("Failed!", "Unable to delete product.", "error");
+          }
         })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.deletedCount > 0) {
-              setProducts(products.filter((p) => p._id !== id));
-              Swal.fire({
-                title: "Deleted!",
-                text: "Product has been deleted successfully.",
-                icon: "success",
-                timer: 1500,
-                showConfirmButton: false,
-              });
-            } else {
-              Swal.fire("Failed!", "Unable to delete product.", "error");
-            }
-          })
-          .catch(() =>
-            Swal.fire("Error!", "Something went wrong while deleting.", "error")
-          );
-      }
+        .catch(() => {
+          Swal.fire("Error!", "Something went wrong while deleting.", "error");
+        })
+        .finally(() => setLoading(false)); // ✅ proper cleanup
     });
   };
 
-  // ✅ Update product with SweetAlert2
+  // ✅ Update product
   const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
     const updated = {
       name: form.name.value,
       image: form.image.value,
-      price: Number(form.price.value),      // convert to number
+      price: Number(form.price.value),
       origin: form.origin.value,
-      rating: Number(form.rating.value),    // convert to number
-      quantity: Number(form.quantity.value) // convert to number
+      rating: Number(form.rating.value),
+      quantity: Number(form.quantity.value),
     };
 
-    console.log(selectedProduct._id);
-
-    console.log(updated);
-
-    fetch(`http://localhost:3000/products/${selectedProduct._id}`, {
-      method: "put",
+    setLoading(true);
+    fetch(`https://react-trade-shift-server.vercel.app/products/${selectedProduct._id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${user.accessToken}`,
@@ -99,12 +102,11 @@ const MyExports = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          setProducts(
-            products.map((p) =>
+          setProducts((prev) =>
+            prev.map((p) =>
               p._id === selectedProduct._id ? { ...p, ...updated } : p
             )
           );
-          setSelectedProduct(null);
           Swal.fire({
             title: "Updated!",
             text: "Product information has been successfully updated.",
@@ -121,18 +123,27 @@ const MyExports = () => {
             showConfirmButton: false,
           });
         }
+        setSelectedProduct(null);
       })
-      .catch(() =>
-        Swal.fire("Error!", "Something went wrong while updating.", "error")
-      );
+      .catch(() => {
+        Swal.fire("Error!", "Something went wrong while updating.", "error");
+      })
+      .finally(() => setLoading(false)); // ✅ ensures UI resets properly
   };
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  // ✅ Loading state display
+  if (loading)
+    return (
+      <p className="text-center mt-10">
+        <Loading></Loading>
+      </p>
+    );
+
 
   return (
     <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
       <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
-        My Exports({products.length})
+        My Exports( {Array.isArray(products)&&products?.length})
       </h2>
 
       {/* ✅ Table for larger devices */}
@@ -150,7 +161,7 @@ const MyExports = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {products.map((product) => (
+            {Array.isArray(products) && products?.map((product) => (
               <tr
                 key={product._id}
                 className="hover:bg-base-100 transition-colors"
@@ -192,7 +203,7 @@ const MyExports = () => {
           </tbody>
         </table>
 
-        {products.length === 0 && (
+        {products?.length === 0 && (
           <p className="text-center p-6 text-gray-500">
             No export products found.
           </p>
@@ -201,39 +212,40 @@ const MyExports = () => {
 
       {/* ✅ Mobile Card View */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
-        {products.map((product) => (
+        {Array.isArray(products) && products?.map((product) => (
           <div
             key={product._id}
-            className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm"
+            className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm flex flex-col h-full"
           >
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-40 object-cover rounded-lg mb-3"
+              className="w-full h-40 object-cover rounded-lg mb-3 flex-shrink-0"
             />
-            <h3 className="text-lg font-semibold">{product.name}</h3>
-            <p className="text-gray-600">
+            <h3 className="text-lg font-semibold mb-1">{product.name}</h3>
+            <p className="text-gray-600 mb-1">
               Price: <span className="font-medium">৳{product.price}</span>
             </p>
-            <p className="text-gray-600">Origin: {product.origin}</p>
-            <p className="text-gray-600">Rating: {product.rating}</p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-1">Origin: {product.origin}</p>
+            <p className="text-gray-600 mb-1">Rating: {product.rating}</p>
+            <p className="text-gray-600 mb-3">
               Quantity:{" "}
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
                 {product.quantity}
               </span>
             </p>
 
-            <div className="flex justify-between mt-4">
+            {/* Push buttons to bottom */}
+            <div className="mt-auto flex gap-2">
               <button
                 onClick={() => setSelectedProduct(product)}
-                className="bg-primary text-white px-3 py-2 rounded hover:opacity-90 flex-1 mr-2"
+                className="flex-1 bg-primary text-white px-3 py-2 rounded hover:opacity-90"
               >
                 Update
               </button>
               <button
                 onClick={() => handleDelete(product._id)}
-                className="bg-error text-white px-3 py-2 rounded hover:opacity-90 flex-1 ml-2"
+                className="flex-1 bg-error text-white px-3 py-2 rounded hover:opacity-90"
               >
                 Delete
               </button>
@@ -242,8 +254,10 @@ const MyExports = () => {
         ))}
       </div>
 
+
+
       {/* ✅ Update Modal */}
-      {selectedProduct && (
+  {Array.isArray(selectedProduct) &&selectedProduct && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
             <h3 className="text-xl font-semibold mb-4 text-center text-primary">

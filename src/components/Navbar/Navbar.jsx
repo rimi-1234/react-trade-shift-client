@@ -66,27 +66,40 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Theme Switch */}
-
-        {/* User/Login */}
+        {/* User & Theme */}
         <div className="hidden sm:flex items-center gap-3">
-          <Switch checked={theme === "light"} onChange={(e) => handleTheme(!e.target.checked)} />
+          <Switch
+            checked={theme === "light"}
+            onChange={(e) => handleTheme(!e.target.checked)}
+          />
+
           {loading ? (
             <p>Loading...</p>
           ) : user ? (
-            <>
-              <img
-                src={user.photoURL || userIcon}
-                alt="User"
-                className="w-10 h-10 rounded-full border-2 border-transparent hover:border-primary cursor-pointer transition"
-              />
+            <div className="flex items-center gap-3">
+              {/* Avatar with Tooltip */}
+              <div className="relative group">
+                <img
+                  src={user?.photoURL || userIcon}
+                  alt="User"
+                  className="w-10 h-10 rounded-full border-2 border-transparent hover:border-primary cursor-pointer transition"
+                />
+                <span className="absolute bottom-full left-1/2 -top-6  -translate-x-1/2 mb-2
+                                  text-gray-600 text-sm md:text-base font-semibold
+                                 px-3 py-1 rounded shadow-lg
+                                 opacity-0 group-hover:opacity-100
+                                 transition-opacity duration-300 whitespace-nowrap">
+                  {user.displayName}
+                </span>
+              </div>
+
               <button
                 onClick={handleLogOut}
                 className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold"
               >
                 LogOut
               </button>
-            </>
+            </div>
           ) : (
             <Link
               to="/auth/login"
@@ -128,21 +141,37 @@ const Navbar = () => {
 
           {/* Theme Switch in Mobile */}
           <div className="w-full flex justify-center">
-                   <Switch checked={theme === "light"} onChange={(e) => handleTheme(!e.target.checked)} />
+            <Switch
+              checked={theme === "light"}
+              onChange={(e) => handleTheme(!e.target.checked)}
+            />
           </div>
 
+          {/* User/Login in Mobile */}
           {user ? (
-            <button
-              onClick={handleLogOut}
-              className="w-full px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
-            >
-              LogOut
-            </button>
+            <div className="flex flex-col items-center gap-2 w-full">
+              <div className="flex flex-col items-center gap-1">
+                <img
+                  src={user?.photoURL || userIcon}
+                  alt="User"
+                  className="w-10 h-10 rounded-full border-2 border-transparent cursor-pointer"
+                />
+                <span className="text-sm md:text-base font-semibold text-white bg-blue-500 px-3 py-1 rounded shadow-lg">
+                  {user.displayName}
+                </span>
+              </div>
+              <button
+                onClick={handleLogOut}
+                className="w-full px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
+              >
+                LogOut
+              </button>
+            </div>
           ) : (
             <Link
               to="/auth/login"
               onClick={() => setIsOpen(false)}
-              className="w-full px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
+              className="w-full text-center px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
             >
               Login
             </Link>

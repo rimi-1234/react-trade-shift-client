@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../ProductCard/ProductCard';
+import Loading from '../Loading/Loading';
 
 const LatestProducts = () => {
-    const [products, setProducts] = useState([]);
-    useEffect(() => {
-        fetch("http://localhost:3000/latest-products")
-            .then((res) => res.json())
-            .then((data) => setProducts(data))
-            .catch((err) => console.error(err));
-    }, []);
-    return (
-        <div className="pt-10 max-w-[1100px] mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {products.map((product) => (
-                    <div key={product._id} className="text-left">
-                        <ProductCard product={product} />
-                    </div>
-                ))}
-            </div>
-        </div>
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // 👈 loading state
 
-    );
+  useEffect(() => {
+    fetch("https://react-trade-shift-server.vercel.app/latest-products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false)); // 👈 stop loading
+  }, []);
+
+  return (
+    <div className="pt-10 max-w-[1100px] mx-auto">
+      {loading ? (
+        <Loading></Loading>
+      ) : products?.length > 0 ? (
+       
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {Array.isArray(products)&&products.map((product) => (
+            <div key={product._id} className="text-left">
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+      ) : (
+   
+        <p className="text-center text-gray-500 text-lg">No products available</p>
+      )}
+    </div>
+  );
 };
 
 export default LatestProducts;

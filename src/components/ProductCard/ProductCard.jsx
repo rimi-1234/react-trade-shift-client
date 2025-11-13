@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div
-      className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white flex flex-col h-full"
+      className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white flex flex-col h-full "
       initial={{ opacity: 0, y: 30 }}          // start slightly below and invisible
       animate={{ opacity: 1, y: 0 }}           // animate to visible
       transition={{ duration: 0.5, ease: "easeOut" }}
