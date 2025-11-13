@@ -6,7 +6,7 @@ import useTitle from "../../hooks/useTitle";
 import Loading from "../../components/Loading/Loading";
 
 const AllProduct = () => {
-  useTitle("AllProduct | TradeShift");
+  useTitle("All Product | TradeShift");
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,7 +66,7 @@ const AllProduct = () => {
       <div className="flex mt-10 flex-col md:flex-row justify-between items-center mb-6 gap-4">
         {/* Total Products */}
         <div className="flex items-center flex-1">
-          <span className="text-gray-700 text-2xl font-bold">
+          <span className="text-gray-700 dark:text-gray-200 text-2xl font-bold">
             Total Products: {filtered.length}
           </span>
         </div>
@@ -75,22 +75,24 @@ const AllProduct = () => {
         <div className="flex items-center w-full max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto 
                 bg-white rounded-full border-2 border-blue-400 px-3 sm:px-4 py-2 shadow-md 
                 transition-all duration-300 hover:shadow-lg hover:shadow-blue-300/50">
+
           <input
             type="text"
             placeholder="Search products..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyPress}
-            className="flex-1 bg-transparent text-gray-700 text-base sm:text-lg placeholder-gray-400
-               outline-none px-4 py-2 rounded-l-full focus:ring-2 focus:ring-blue-400 
-               transition-all duration-300"
+            className="flex-1 bg-transparent text-gray-700 text-sm sm:text-base md:text-lg placeholder-gray-400
+               outline-none px-3 sm:px-4 py-2 rounded-l-full focus:ring-2 focus:ring-blue-400 
+               transition-all duration-300 w-full"
           />
+
           <button
             onClick={handleSearch}
-            className="flex items-center justify-center p-2 sm:p-3 rounded-r-full
+            className="flex items-center justify-center px-3 py-2 sm:px-4 sm:py-2 rounded-r-full
                bg-gradient-to-r from-blue-400 to-purple-400
                text-white hover:scale-105 hover:shadow-lg hover:shadow-blue-300/50
-               transition-transform transition-shadow duration-300 min-w-[44px] sm:min-w-[48px]"
+               transition-transform transition-shadow duration-300 min-w-[40px] sm:min-w-[48px]"
           >
             {loading ? (
               <svg
@@ -114,7 +116,7 @@ const AllProduct = () => {
                 ></path>
               </svg>
             ) : (
-              <Search size={22} className="sm:w-6 sm:h-6" />
+              <Search size={20} className="sm:w-5 sm:h-5" />
             )}
           </button>
         </div>

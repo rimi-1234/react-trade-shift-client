@@ -50,8 +50,8 @@ const Home = () => {
 
       {/* Latest products section */}
       <section className="max-w-6xl mx-auto p-6 mt-5 text-center text-gray-700">
-        <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
-        <p className="mb-6">
+        <h2 className="text-2xl font-bold  dark:text-gray-400 mb-4">Latest Products</h2>
+        <p className="mb-6 dark:text-gray-400">
           Explore our latest import and export collections curated for your
           business success.
         </p>
@@ -60,8 +60,8 @@ const Home = () => {
 
       {/* Best Sellers Section */}
       <section className="max-w-6xl mx-auto p-6 mt-5 text-center text-gray-700">
-        <h2 className="text-2xl font-bold mb-4">Best Sellers</h2>
-        <p className="mb-6">
+        <h2 className="text-2xl dark:text-gray-400 font-bold mb-4">Best Sellers</h2>
+        <p className="mb-6 dark:text-gray-400">
           Do not miss the current offers until the end of month.
         </p>
 

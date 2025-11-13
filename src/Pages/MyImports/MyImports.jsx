@@ -7,18 +7,18 @@ import Loading from "../../components/Loading/Loading";
 import useTitle from "../../hooks/useTitle";
 
 const MyImports = () => {
-      useTitle("MyImports | TradeShift");
+    useTitle("My Imports | TradeShift");
     const [imports, setImports] = useState([]);
     ;
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
-     const [loading, setLoading] = useState(true);
-     
-  
+    const [loading, setLoading] = useState(true);
+
+
     // Fetch user's imports
     useEffect(() => {
         console.log(user.email);
-          setLoading(true)
+        setLoading(true)
 
         fetch(`https://react-trade-shift-server.vercel.app/
 
@@ -29,9 +29,10 @@ imports?email=${user.email}`, {
             },
         })
             .then(res => res.json())
-            .then(data =>{ setImports(data)
+            .then(data => {
+                setImports(data)
 
-                 setLoading(false);
+                setLoading(false);
             })
             .catch(err => console.error(err));
     }, [user.email]);
@@ -61,17 +62,17 @@ imports/${id}`, { method: "DELETE" });
         }
     };
     // ✅ Loading state display
-  if (loading)
-    return (
-      <p className="text-center mt-10">
-       <Loading></Loading>
-      </p>
-    );
-    
+    if (loading)
+        return (
+            <p className="text-center mt-10">
+                <Loading></Loading>
+            </p>
+        );
+
 
     return (
-        <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
-            <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
+        <div className="max-w-7xl mt-20 sm:mt-24 md:mt-52 lg:mt-32 mx-auto p-5">
+            <h2 className="font-bold mb-6 text-center text-2xl dark:text-gray-200 text-gray-700">
                 My Imports({imports?.length})
             </h2>
 
@@ -140,14 +141,14 @@ imports/${id}`, { method: "DELETE" });
                     </tbody>
                 </table>
 
-       {Array.isArray(imports) &&imports?.length === 0 && (
+                {Array.isArray(imports) && imports?.length === 0 && (
                     <p className="text-center p-6 text-gray-500">No imported products found.</p>
                 )}
             </div>
 
             {/* Mobile Card View */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4">
-             {Array.isArray(imports) &&imports?.map((product) => (
+                {Array.isArray(imports) && imports?.map((product) => (
                     <div
                         key={product._id}
                         className="bg-base-100 border border-base-200 rounded-xl p-4 shadow-sm flex flex-col h-full"

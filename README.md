@@ -3,18 +3,28 @@
 **TradeShift** is a modern and responsive e-commerce web platform designed to provide a seamless online shopping experience.  
 It allows users to explore products, view detailed information, manage their accounts, and make purchases efficiently.
 
-🌐 **Live Site URL:** [https://tradeshift.vercel.app](https://tradeshift.vercel.app)
+🌐 **Live Site URL:** [https://rimi-trade-shift-1234.netlify.app/]
 
 ---
 
 ## ✨ Key Features
 
-- 🧭 **Dynamic Product Browsing:** Browse through a wide range of products with category-based filtering and sorting options.
-- 🔍 **Interactive Search System:** Instantly find products using a responsive and fast search bar with real-time suggestions.
-- 📱 **Fully Responsive Design:** Optimized for all devices — from large desktops to mobile screens.
-- 👤 **User Authentication:** Secure login and registration with email/password and social media integrations.
-- 🛒 **Product Management:** Users can view product details, add items to the cart, and proceed to checkout.
-- 💬 **User Feedback:** Integrated review and rating system to help users make informed purchase decisions.
+
+- **One-Click Import (My Imports)**  
+  Import any product into your personal *My Imports* with a single click — quantity validation prevents over-importing and available stock updates automatically.
+
+- **Full Export Management (My Exports)**  
+  Add, update, and delete export products from the UI. Updates are persisted instantly and reflect across the site (create/edit/delete with prefilled modal forms).
+
+- **Real-time UX & Secure Authentication**  
+  Responsive, polished UI with secure user authentication (email/password + Google). Logged-in users stay on private routes after reload; no forced redirects. Dynamic page titles update per route.
+
+- **Search, Filters & Pagination**  
+  Robust search on *All Products* by name. Latest products are shown on the home page (6 newest, sorted by `createdAt: -1`).
+
+- **Dark / Light Mode + Accessibility**  
+  User togglable theme (dark/light) persisted to `localStorage`, with accessible contrast, keyboard nav, and consistent headings/buttons across pages.
+
 
 ---
 
@@ -27,9 +37,3 @@ It allows users to explore products, view detailed information, manage their acc
 - **Hosting:** Vercel (Client) & Render (Server)
 
 ---
-
-## 🚀 How to Run Locally
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-username/tradeshift.git

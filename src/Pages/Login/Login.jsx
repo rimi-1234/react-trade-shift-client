@@ -38,6 +38,7 @@ const Login = () => {
         setError('');
     signInWithEmailAndPasswordFunc(email, password)
       .then((res) => {
+        
         setUser(res.user);
         setLoading(false);
         toast.success("LogIn successful");
@@ -53,13 +54,38 @@ const Login = () => {
 
   const handleGoogleSignin = () => {
     signInWithGoogleFunc()
-      .then((res) => {
-        setUser(res.user);
+      .then((result) => {
+        console.log(result.user);
+
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          image: result.user.photoURL
+        };
+
+        // Create user in the database
+        fetch('http://localhost:3000/users', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(newUser)
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log('Data after user save:', data);
+          })
+          .catch(error => {
+            console.error('Error saving user:', error);
+          });
+
+        // Set user state and show success message
+        setUser(result.user);
         setLoading(false);
         toast.success("Google Sign-in successful!");
       })
       .catch((e) => {
-     
+        console.error(e);
         toast.error(e.message);
       });
   };
@@ -106,10 +132,9 @@ const Login = () => {
 
           {/* Forgot Password */}
           <div className="text-right">
-            <Link className="link text-primary text-sm sm:text-base"  to="/auth/forgot-password"
-  state={{ email: emailInputValue }} >
+            <p className="link text-primary text-sm sm:text-base"  to="/auth/forgot-password" >
               Forgot password?
-            </Link>
+            </p>
           </div>
 
           {/* Login Button */}

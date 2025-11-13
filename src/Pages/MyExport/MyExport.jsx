@@ -14,7 +14,7 @@ const MyExports = () => {
 
   useTitle(
     selectedProduct
-      ? `Editing: ${selectedProduct.name} | MyExports`
+      ? `Editing: ${selectedProduct.name} | My Exports`
       : `MyExports (${products.length}) | TradeShift`
   );
   useEffect(() => {
@@ -81,6 +81,17 @@ const MyExports = () => {
   const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
+
+    const ratingValue = Number(form.rating.value);
+
+    if (ratingValue < 1 || ratingValue > 5) {
+      Swal.fire({
+        title: "Invalid Rating",
+        text: "Rating must be between 1 and 5.",
+        icon: "warning",
+      });
+      return; // Stop submission
+    }
     const updated = {
       name: form.name.value,
       image: form.image.value,
@@ -141,9 +152,9 @@ const MyExports = () => {
 
 
   return (
-    <div className="max-w-7xl mt-16 sm:mt-52 md:mt-44 lg:mt-32 xl:24 mx-auto p-5">
-      <h2 className="font-bold mb-6 text-center text-2xl text-gray-500">
-        My Exports( {Array.isArray(products)&&products?.length})
+    <div className="max-w-7xl mt-20 sm:mt-24 md:mt-52 lg:mt-32 mx-auto p-5">
+      <h2 className="font-bold mb-6 text-center text-2xl dark:text-gray-200 text-gray-700">
+        My Exports ({Array.isArray(products) ? products.length : 0})
       </h2>
 
       {/* ✅ Table for larger devices */}
@@ -257,13 +268,12 @@ const MyExports = () => {
 
 
       {/* ✅ Update Modal */}
-  {Array.isArray(selectedProduct) &&selectedProduct && (
+      {selectedProduct && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
             <h3 className="text-xl font-semibold mb-4 text-center text-primary">
               Update Product
             </h3>
-
             <form onSubmit={handleUpdate} className="space-y-3">
               {["name", "image", "price", "origin", "rating", "quantity"].map(
                 (field) => (
@@ -278,6 +288,9 @@ const MyExports = () => {
                     defaultValue={selectedProduct[field]}
                     className="border p-2 w-full rounded focus:ring-2 focus:ring-primary outline-none"
                     required
+                    {...(field === "rating" ? { min: 1, max: 5, step: 0.1 } : {})}
+                    {...(field === "price" ? { min: 0 } : {})}
+                    {...(field === "quantity" ? { min: 0 } : {})}
                   />
                 )
               )}

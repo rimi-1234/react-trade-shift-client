@@ -5,7 +5,7 @@ import useTitle from "../../hooks/useTitle";
 import Loading from "../../components/Loading/Loading";
 
 const AddExportProduct = () => {
-  useTitle("AddExportProduct | TradeShift");
+  useTitle("Add Export| TradeShift");
   const { user } = use(AuthContext)
   const [products, setProducts] = useState([]);
   const formRef = useRef();

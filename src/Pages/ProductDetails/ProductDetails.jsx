@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { AuthContext } from "../../Context/AuthContext";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
+import errorImg from '../../assets/App-Error.png'
 import useTitle from "../../hooks/useTitle";
 import Loading from "../../components/Loading/Loading";
 
 function ProductDetails() {
-  useTitle("ProductDetails | TradeShift");
+  useTitle("Product Details | TradeShift");
+      let navigate = useNavigate();
   const { id } = useParams();
   const { user } = useContext(AuthContext);
 
@@ -32,7 +34,23 @@ products/${id}`)
   }, [id]);
 
   if (loading) return <p className="text-center mt-10"><Loading></Loading></p>;
-  if (!product) return <p className="text-center mt-10">Product not found.</p>;
+ 
+
+      if (!product) 
+     return(
+        <>
+            <div className="flex flex-col items-center justify-center h-screen text-center">
+                <img
+                    src={errorImg}  // your error image in `public/` folder
+                    alt="Error"
+                    className="w-96 h-96 mb-6"
+                />
+                <h2 className="text-5xl font-bold  mb-2">Oops, app not found!</h2>
+                <p className="text-gray-500 text-xl py-2">The app you are looking for is not available.</p>
+                <button onClick={() => navigate(-1)} className="btn mr-3 mt-3 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] text-white"><span></span>Go Back!</button>
+            </div>
+        </>
+     );
 
   // Validate quantity input
   const isQuantityValid = quantity > 0 && quantity <= product.quantity;

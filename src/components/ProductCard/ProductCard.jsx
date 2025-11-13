@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
       whileHover={{ scale: 1.05, y: -5 }}      // scale up and lift on hover
       whileTap={{ scale: 0.95 }}               // click feedback
     >
-   
+
 
       {/* Top Content */}
       <div className="flex-1 flex flex-col">
@@ -54,18 +54,19 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* See Details Button aligned at the bottom */}
-      <motion.button
-        className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded transition"
-        whileHover={{ backgroundColor: "#3B82F6", color: "#fff" }} // Tailwind blue-500
+      <motion.div
+        className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded transition text-center"
+        whileHover={{ backgroundColor: "#3B82F6", color: "#fff" }}
         whileTap={{ scale: 0.95 }}
       >
         <Link
-          to={`/products-details/${_id}`} // dynamically pass the product id
+          to={`/products-details/${_id}`}
           className="w-full h-full block"
         >
           See Details
         </Link>
-      </motion.button>
+      </motion.div>
+
     </motion.div>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../Context/AuthContext';
 import { FaEye } from "react-icons/fa";
@@ -14,10 +14,20 @@ const Register = () => {
     signInWithGoogleFunc,
     setUser,
     updateProfileFunc,
-    setLoading
+    setLoading,
+    user
 
 
   } = useContext(AuthContext);
+
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
   const [show, setShow] = useState(false);
   const [Error, setError] = useState('');
   const handleRegister = (e) => {
@@ -40,7 +50,7 @@ const Register = () => {
       console.log({ name, photo, email, password });
     createUserWithEmailAndPasswordFunc(email, password)
       .then((res) => {
-
+        
         const user = res.user;
         updateProfileFunc({ displayName: name, photoURL: photo })
           .then(() => {
@@ -88,13 +98,38 @@ const Register = () => {
 
   const handleGoogleSignin = () => {
     signInWithGoogleFunc()
-      .then((res) => {
-        setUser(res.user);
+      .then((result) => {
+        console.log(result.user);
+
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          image: result.user.photoURL
+        };
+
+        // Create user in the database
+        fetch('http://localhost:3000/users', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(newUser)
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log('Data after user save:', data);
+          })
+          .catch(error => {
+            console.error('Error saving user:', error);
+          });
+
+        // Set user state and show success message
+        setUser(result.user);
         setLoading(false);
         toast.success("Google Sign-in successful!");
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
         toast.error(e.message);
       });
   };
