@@ -95,7 +95,7 @@ npm install
 
 MONGO_URI=your_mongo_connection_string
 JWT_SECRET=your_secret_key
-PORT=5000
+PORT=3000
 
 
 ▶️ Run the server:
