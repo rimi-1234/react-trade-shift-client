@@ -6,9 +6,15 @@ It allows users to explore products, view detailed information, manage their acc
 
 ![TradeShift Screenshot](https://github.com/rimi-1234/react-trade-shift-client/blob/main/src/assets/Screenshot%20(11).png)
 
-🌐 **Live Site URL:** [https://rimi-trade-shift-1234.netlify.app/]
-🌐 **[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black?style=for-the-badge)](https://github.com/rimi-1234/react-hero-app-projects):
-🌐 **[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black?style=for-the-badge)](https://github.com/rimi-1234/react-hero-app-projects)
+
+
+🌐 **Live Site URL:** https://rimi-trade-shift-1234.netlify.app/
+
+🌐 **GitHub Repository (Client):**  
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Client-black?style=for-the-badge)](https://github.com/rimi-1234/react-trade-shift-client)
+
+🌐 **GitHub Repository (Server):**  
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Server-darkgreen?style=for-the-badge)](https://github.com/rimi-1234/react-trade-shift-server)
 
 ---
 
@@ -42,3 +48,61 @@ It allows users to explore products, view detailed information, manage their acc
 - **Hosting:** Vercel (Client) & Render (Server)
 
 ---
+
+
+
+⚙️ Installation & Setup
+📌 Clone the Repository (Client)
+git clone https://github.com/rimi-1234/react-trade-shift-client.git
+
+📌 Clone the Repository (Server)
+git clone https://github.com/rimi-1234/react-trade-shift-server.git
+
+🛠️ Client Setup
+
+📁 Go to the client directory:
+
+cd react-trade-shift-client
+
+
+📦 Install dependencies:
+
+npm install
+
+
+▶️ Run the project:
+
+npm run dev
+
+
+🌍 Open in your browser:
+
+http://localhost:5173/
+
+🛠️ Server Setup
+
+📁 Go to the server directory:
+
+cd react-trade-shift-server
+
+
+📦 Install dependencies:
+
+npm install
+
+
+🔑 Create a .env file and add your variables:
+
+MONGO_URI=your_mongo_connection_string
+JWT_SECRET=your_secret_key
+PORT=5000
+
+
+▶️ Run the server:
+
+npm start
+
+
+🌍 Server will run here:
+
+http://localhost:3000/
