@@ -7,6 +7,8 @@ It allows users to explore products, view detailed information, manage their acc
 ![TradeShift Screenshot](https://github.com/rimi-1234/react-trade-shift-client/blob/main/src/assets/Screenshot%20(11).png)
 
 🌐 **Live Site URL:** [https://rimi-trade-shift-1234.netlify.app/]
+🌐 **[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black?style=for-the-badge)](https://github.com/rimi-1234/react-hero-app-projects):
+🌐 **[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-black?style=for-the-badge)](https://github.com/rimi-1234/react-hero-app-projects)
 
 ---
 
