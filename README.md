@@ -8,7 +8,7 @@ It allows users to explore products, view detailed information, manage their acc
 
 
 
-🌐 **Live Site URL:** https://rimi-trade-shift-1234.netlify.app/
+🌐 **Live Site URL:** [(https://react-tract-shift-client.vercel.app/)]
 
 🌐 **GitHub Repository (Client):**  
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Client-black?style=for-the-badge)](https://github.com/rimi-1234/react-trade-shift-client)
