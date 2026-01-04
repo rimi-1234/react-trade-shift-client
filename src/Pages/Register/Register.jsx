@@ -5,234 +5,133 @@ import { AuthContext } from '../../Context/AuthContext';
 import { FaEye } from "react-icons/fa";
 import { IoEyeOff } from "react-icons/io5";
 import useTitle from "../../hooks/useTitle";
+import { motion } from "framer-motion";
 
 const Register = () => {
   useTitle("Register | TradeShift");
   const navigate = useNavigate();
-  const {
-    createUserWithEmailAndPasswordFunc,
-    signInWithGoogleFunc,
-    setUser,
-    updateProfileFunc,
-    setLoading,
-    user
-
-
-  } = useContext(AuthContext);
+  const { createUserWithEmailAndPasswordFunc, setUser, updateProfileFunc, setLoading, user } = useContext(AuthContext);
 
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/dashboard";
+
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (user) {
-      navigate(from, { replace: true });
-    }
+    if (user) { navigate(from, { replace: true }); }
   }, [user, navigate, from]);
-  const [show, setShow] = useState(false);
-  const [Error, setError] = useState('');
-  const handleRegister = (e) => {
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log(e.target);
     const form = e.target;
     const name = form.name.value;
-
     const photo = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    const role = form.role.value; // Will be "trader" by default
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     if (!passwordRegex.test(password)) {
-      toast.error("Password must have at least 1 uppercase, 1 lowercase letter, and be 6+ characters long.");
-      setError('Password must have at least 1 uppercase, 1 lowercase letter, and be 6+ characters long.')
+      setError('Password must have at least 1 uppercase, 1 lowercase, and 6+ characters.');
       return;
     }
-    setError(""),
-      console.log({ name, photo, email, password });
-    createUserWithEmailAndPasswordFunc(email, password)
-      .then((res) => {
-        
-        const user = res.user;
-        updateProfileFunc({ displayName: name, photoURL: photo })
-          .then(() => {
-            console.log(user);
-            setUser({ ...user, displayName: name, photoURL: photo });
-            navigate("/");
-            toast.success("Register Successful!");
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            setUser(user);
-          });
+    setError("");
 
+    try {
+      const res = await createUserWithEmailAndPasswordFunc(email, password);
+      const firebaseUser = res.user;
 
-      })
-      .catch((e) => {
-        console.log(e);
-        console.log(e.code);
-        if (e.code === "auth/email-already-in-use") {
-          toast.error(
-            "User already exists in the database. Etai bastob haahahahaha"
-          );
-        } else if (e.code === "auth/weak-password") {
-          toast.error("Bhai tomake at least 6 ta digit er pass dite hobe");
-        } else if (e.code === "auth/invalid-email") {
-          toast.error("Invalid email format. Please check your email.");
-        } else if (e.code === "auth/user-not-found") {
-          toast.error("User not found. Please sign up first.");
-        } else if (e.code === "auth/wrong-password") {
-          toast.error("Wrong password. Please try again.");
-        } else if (e.code === "auth/user-disabled") {
-          toast.error("This user account has been disabled.");
-        } else if (e.code === "auth/too-many-requests") {
-          toast.error("Too many attempts. Please try again later.");
-        } else if (e.code === "auth/operation-not-allowed") {
-          toast.error("Operation not allowed. Please contact support.");
-        } else if (e.code === "auth/network-request-failed") {
-          toast.error("Network error. Please check your connection.");
-        } else {
-          toast.error(e.message || "An unexpected error occurred.");
-        }
+      // 1. Update Firebase Profile (Local Auth State)
+      await updateProfileFunc({ displayName: name, photoURL: photo });
+
+      // 2. Prepare User Object for Database
+      const dbUser = {
+        name,
+        email,
+        image: photo,
+        role: role, 
+        createdAt: new Date().toISOString()
+      };
+
+      // 3. Save to MongoDB
+      const response = await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(dbUser)
       });
+
+      if (response.ok) {
+        setUser({ ...firebaseUser, displayName: name, photoURL: photo });
+        toast.success(`Welcome to TradeShift, ${name}! Registered as ${role}.`);
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error(err.message);
+      setLoading(false);
+    }
   };
 
-  const handleGoogleSignin = () => {
-    signInWithGoogleFunc()
-      .then((result) => {
-        console.log(result.user);
-
-        const newUser = {
-          name: result.user.displayName,
-          email: result.user.email,
-          image: result.user.photoURL
-        };
-
-        // Create user in the database
-        fetch('http://localhost:3000/users', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify(newUser)
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log('Data after user save:', data);
-          })
-          .catch(error => {
-            console.error('Error saving user:', error);
-          });
-
-        // Set user state and show success message
-        setUser(result.user);
-        setLoading(false);
-        toast.success("Google Sign-in successful!");
-      })
-      .catch((e) => {
-        console.error(e);
-        toast.error(e.message);
-      });
-  };
   return (
-    <div className="flex justify-center pt-24 sm:pt-52 md:pt-52 lg:pt-40  items-center min-h-screen bg-base-200 px-4">
-      <div className="card bg-base-100 w-full max-w-md md:max-w-lg lg:max-w-xl shadow-2xl py-6 px-5 sm:px-8 rounded-lg">
-        <h2 className="text-center text-2xl sm:text-3xl font-bold text-primary mb-6">
-          Register your account
+    <div className="min-h-screen pt-32 pb-20 px-4 bg-slate-50 dark:bg-[#020617] flex items-center justify-center relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]" />
+
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="card bg-white dark:bg-slate-900 w-full max-w-xl shadow-2xl p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/5"
+      >
+        <h2 className="text-center text-3xl font-black text-slate-900 dark:text-white mb-8 tracking-tighter uppercase italic">
+          Join <span className="text-blue-600">TradeShift</span>
         </h2>
-        <form onSubmit={handleRegister} className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="label flex justify-items-start font-semibold text-base-content">Name</label>
-            <input
-              name="name"
-              type="text"
-              className="input input-bordered w-full"
-              placeholder="Name"
-              required
-            />
+
+        <form onSubmit={handleRegister} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="md:col-span-1">
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 block ml-1">Full Name</label>
+            <input name="name" type="text" className="input input-bordered w-full bg-slate-50 dark:bg-slate-800 border-none" placeholder="Enter Full Name" required />
           </div>
 
-          {/* Photo URL */}
-          <div>
-            <label className="label flex justify-items-start font-semibold text-base-content">Photo URL</label>
-            <input
-              name="photo"
-              type="text"
-              className="input input-bordered w-full"
-              placeholder="Photo URL"
-              required
-            />
+          {/* Role Selection - Defaulted to Global Trader */}
+          <div className="md:col-span-1">
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 block ml-1">Account Role</label>
+            <select name="role" className="select select-bordered w-full bg-slate-50 dark:bg-slate-800 border-none font-bold text-blue-600" required defaultValue="trader">
+              <option value="trader">Global Trader</option>
+            
+            </select>
           </div>
 
-          {/* Email */}
-          <div>
-            <label className="label flex justify-items-start font-semibold text-base-content">Email</label>
-            <input
-              name="email"
-              type="email"
-              className="input input-bordered w-full"
-              placeholder="Email"
-              required
-            />
+          <div className="md:col-span-2">
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 block ml-1">Avatar URL</label>
+            <input name="photo" type="text" className="input input-bordered w-full bg-slate-50 dark:bg-slate-800 border-none" placeholder="https://image-link.com" required />
           </div>
 
-          {/* Password */}
-          <div className="relative">
-            <label className="label flex justify-items-start font-semibold text-base-content">
-              Password
-            </label>
-            <input
-              type={show ? "text" : "password"}
-              name="password"
-              placeholder="Enter your password"
-              className="input input-bordered w-full pr-10 text-base-content placeholder-base-content/50"
-              required
-            />
-            <span
-              onClick={() => setShow((prev) => !prev)}
-              className="absolute right-[8px] top-[40px]  transform -translate-y-[20%] cursor-pointer text-base-content/70 hover:text-primary transition-colors z-10"
-            >
+          <div className="md:col-span-2">
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 block ml-1">Business Email</label>
+            <input name="email" type="email" className="input input-bordered w-full bg-slate-50 dark:bg-slate-800 border-none" placeholder="trader@company.com" required />
+          </div>
+
+          <div className="md:col-span-2 relative">
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 block ml-1">Secure Password</label>
+            <input type={show ? "text" : "password"} name="password" placeholder="••••••••" className="input input-bordered w-full bg-slate-50 dark:bg-slate-800 border-none pr-12" required />
+            <button type="button" onClick={() => setShow(!show)} className="absolute right-4 top-[38px] text-slate-400 hover:text-blue-500 transition-colors">
               {show ? <FaEye /> : <IoEyeOff />}
-            </span>
-          </div>
-          {Error && <p className="text-xs text-error">{Error}</p>}
-
-          {/* Submit Button */}
-          <button type="submit" className="btn btn-primary w-full mt-3">
-            Register
-          </button>
-
-          {/* OR Divider */}
-          <div className="flex items-center justify-center gap-2 my-4">
-            <div className="h-px w-16 bg-base-content/20"></div>
-            <span className="text-sm text-base-content/50">or</span>
-            <div className="h-px w-16 bg-base-content/20"></div>
+            </button>
           </div>
 
-          {/* Google Signin */}
-          <button onClick={handleGoogleSignin}
-            type="button"
-            className="flex items-center justify-center gap-3 w-full py-2 px-5 bg-[#00AEEF]/20 text-gray-800 rounded-lg font-semibold hover:bg-blue-200 transition-colors"
-          >
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="google"
-              className="w-5 h-5"
-            />
-            Continue with Google
-          </button>
+          {error && <p className="md:col-span-2 text-[10px] text-red-500 font-bold uppercase text-center">{error}</p>}
 
-          {/* Login Link */}
-          <p className="text-center font-semibold pt-5 text-sm sm:text-base">
-            Already Have An Account?{" "}
-            <Link className=" font-bold text-primary" to="/auth/login">
-              Login
-            </Link>
-          </p>
+          <button type="submit" className="md:col-span-2 btn btn-primary h-14 rounded-xl text-white font-black uppercase tracking-widest shadow-lg shadow-blue-500/30">
+            Create Trader Account
+          </button>
         </form>
-      </div>
-    </div>
 
+        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/5">
+           <p className="text-center font-medium text-slate-500 text-sm">
+             Already part of the network? <Link className="font-black text-blue-600 uppercase tracking-tighter hover:underline" to="/auth/login">Login</Link>
+           </p>
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

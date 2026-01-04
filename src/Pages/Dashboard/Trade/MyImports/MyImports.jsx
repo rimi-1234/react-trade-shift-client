@@ -2,9 +2,9 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 
 import Swal from "sweetalert2";
-import { AuthContext } from "../../Context/AuthContext";
-import Loading from "../../components/Loading/Loading";
-import useTitle from "../../hooks/useTitle";
+import useTitle from "../../../../hooks/useTitle";
+import { AuthContext } from "../../../../Context/AuthContext";
+import Loading from "../../../../components/Loading/Loading";
 
 const MyImports = () => {
     useTitle("My Imports | TradeShift");

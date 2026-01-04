@@ -9,15 +9,23 @@ import Login from "../Pages/Login/Login"
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword"
 import ErrorPages from "../Pages/ErrorPages/ErrorPages"
 
-import AddExportProduct from "../Pages/AddExportProduct/AddExportProduct"
+
 import PrivateRouter from "../Provider/PrivateRouter"
 import AllProduct from "../Pages/AllProduct/AllProduct"
-import MyExport from "../Pages/MyExport/MyExport"
+import MyExport from "../Pages/Dashboard/Trade/MyExport/MyExport"
+
 import ProductDetails from "../Pages/ProductDetails/ProductDetails"
-import MyImports from "../Pages/MyImports/MyImports"
+import MyImports from "../Pages/Dashboard/Trade/MyImports/MyImports"
 import Statistics from "../Pages/Dashboard/Common/Statistics"
 import DashboardLayout from "../Layouts/DashboardLayout"
 import Profile from "../Pages/Dashboard/Common/Profile"
+import About from "../Pages/About/About"
+import Contact from "../Pages/Contact/Contact"
+import MarketInsights from "../Pages/MarketInsights/MarketInsights"
+import TradeRoute from "./TradeRoute"
+import AddExportProduct from "../Pages/Dashboard/Trade/AddExportProduct/AddExportProduct"
+
+
 
 
 const router = createBrowserRouter([
@@ -37,18 +45,19 @@ const router = createBrowserRouter([
 
       },
       {
-        path: "/add-export",
-        element: <PrivateRouter><AddExportProduct></AddExportProduct></PrivateRouter>
+        path: "/about",
+        element: <About />,
       },
       {
-        path: "/my-exports",
-        element: <PrivateRouter><MyExport></MyExport></PrivateRouter>
+        path: "/contact",
+        element: <Contact />,
       },
       {
-        path: "/my-imports",
-        element: <PrivateRouter><MyImports></MyImports></PrivateRouter>
+        path: "/insights",
+        element: <MarketInsights />,
       },
-       {
+ 
+      {
         path: "/products-details/:id",
         element: (
           <PrivateRouter>
@@ -78,7 +87,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-   {
+  {
     path: '/dashboard',
     element: (
       <PrivateRouter>
@@ -94,7 +103,19 @@ const router = createBrowserRouter([
           </PrivateRouter>
         ),
       },
-   
+           {
+        path: "add-export",
+        element: <TradeRoute><AddExportProduct></AddExportProduct></TradeRoute>
+      },
+      {
+        path: "my-exports",
+        element: <TradeRoute><MyExport></MyExport></TradeRoute>
+      },
+      {
+        path: "my-imports",
+        element: <TradeRoute><MyImports></MyImports></TradeRoute>
+      },
+
       {
         path: 'profile',
         element: (
@@ -103,8 +124,8 @@ const router = createBrowserRouter([
           </PrivateRouter>
         ),
       },
-   
-     
+
+
     ],
   },
 

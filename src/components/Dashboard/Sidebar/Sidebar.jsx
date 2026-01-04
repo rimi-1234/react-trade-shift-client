@@ -1,99 +1,91 @@
 import { useContext, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, NavLink } from 'react-router' // Ensure you use NavLink for active states
+import { AuthContext } from '../../../Context/AuthContext'
 
-// import logo from '../../../assets/images/logo-flat.png'
 // Icons
 import { GrLogout } from 'react-icons/gr'
 import { FcSettings } from 'react-icons/fc'
 import { AiOutlineBars } from 'react-icons/ai'
-import { BsGraphUp } from 'react-icons/bs'
+import { BsGraphUp, BsBoxSeam, BsArrowDownLeftSquare, BsPlusCircle } from 'react-icons/bs'
 
-// User Menu
 import MenuItem from './Menu/MenuItem'
-import AdminMenu from './Menu/AdminMenu'
-import SellerMenu from './Menu/SellerMenu'
-import CustomerMenu from './Menu/CustomerMenu'
-import { AuthContext } from '../../../Context/AuthContext'
+import useRole from '../../../hooks/useRole';
+import TraderMenu from './Menu/TradeMenu'
 
 const Sidebar = () => {
-  const { signoutUserFunc } = useContext(AuthContext);
+  const { signoutUserFunc, user } = useContext(AuthContext);
   const [isActive, setActive] = useState(false)
-
-  // Sidebar Responsive Handler
+  console.log(user);
+  
+  const [role] = useRole();
   const handleToggle = () => {
     setActive(!isActive)
   }
 
   return (
     <>
-      {/* Small Screen Navbar, only visible till md breakpoint */}
-      <div className='bg-gray-100 text-gray-800 flex justify-between md:hidden'>
-        <div>
-          <div className='block cursor-pointer p-4 font-bold'>
-            {/* <Link to='/'>
-              <img src={logo} alt='logo' width='100' height='100' />
-            </Link> */}
-          </div>
+      {/* 1. Mobile Navbar (Visible only on small screens) */}
+      <div className='bg-slate-900 text-white flex justify-between md:hidden p-4 shadow-lg'>
+        <div className='font-black tracking-tighter text-xl text-blue-500'>
+          TRADESHIFT
         </div>
-
         <button
           onClick={handleToggle}
-          className='mobile-menu-button p-4 focus:outline-none focus:bg-gray-200'
+          className='mobile-menu-button p-2 focus:outline-none hover:bg-slate-800 rounded-lg transition-colors'
         >
-          <AiOutlineBars className='h-5 w-5' />
+          <AiOutlineBars className='h-6 w-6' />
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* 2. Main Sidebar Container */}
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
-          isActive && '-translate-x-full'
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        className={`z-20 md:fixed flex flex-col justify-between overflow-x-hidden bg-[#050b1a] border-r border-white/5 w-64 space-y-6 px-4 py-6 absolute inset-y-0 left-0 transform ${
+          isActive ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl`}
       >
         <div className='flex flex-col h-full'>
-          {/* Top Content */}
-          <div>
-            {/* Logo */}
-            <div className='w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-lime-100 mx-auto'>
-              {/* <Link to='/'>
-                <img src={logo} alt='logo' width='100' height='100' />
-              </Link> */}
+          {/* TOP: Brand Identity */}
+          <div className='px-4 mb-10'>
+            <div className='flex items-center gap-2'>
+              <div className='w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white'>T</div>
+              <span className='text-white font-black tracking-tighter text-xl uppercase italic'>TradeShift</span>
             </div>
+            <div className='h-[1px] w-full bg-gradient-to-r from-blue-500/50 to-transparent mt-4' />
           </div>
 
-          {/* Middle Content */}
-          <div className='flex flex-col justify-between flex-1 mt-6'>
-            {/*  Menu Items */}
-            <nav>
-              {/* Common Menu */}
+          {/* MIDDLE: Navigation Menu */}
+          <div className='flex flex-col justify-between flex-1'>
+            <nav className="space-y-2">
+              {/* Core Stats */}
               <MenuItem
                 icon={BsGraphUp}
                 label='Statistics'
                 address='/dashboard'
               />
-              {/* Role-Based Menu */}
-              {/* <CustomerMenu />
-              <SellerMenu />
-              <AdminMenu /> */}
+          
+
+                {/* 2. Trader Management Menu */}
+                {role === 'trader' && <TraderMenu />}
+
+              
+     
             </nav>
           </div>
 
-          {/* Bottom Content */}
-          <div>
-            <hr />
-
+          {/* BOTTOM: User Controls */}
+          <div className='mt-auto pt-6 border-t border-white/5'>
             <MenuItem
               icon={FcSettings}
-              label='Profile'
+              label='Profile Settings'
               address='/dashboard/profile'
             />
+            
             <button
               onClick={signoutUserFunc}
-              className='flex cursor-pointer w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform'
+              className='flex cursor-pointer w-full items-center px-4 py-3 mt-4 text-slate-400 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all duration-200 group'
             >
-              <GrLogout className='w-5 h-5' />
-
-              <span className='mx-4 font-medium'>Logout</span>
+              <GrLogout className='w-5 h-5 group-hover:rotate-12 transition-transform' />
+              <span className='mx-4 font-bold uppercase text-xs tracking-widest'>Logout</span>
             </button>
           </div>
         </div>

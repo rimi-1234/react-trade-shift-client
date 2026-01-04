@@ -28,13 +28,10 @@ const Navbar = () => {
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/all-products", label: "All Products" },
-    ...(user
-      ? [
-          { path: "/my-exports", label: "My Exports" },
-          { path: "/my-imports", label: "My Imports" },
-          { path: "/add-export", label: "Add Export" },
-        ]
-      : []),
+    { path: "/about", label: "About" },
+    { path: "/insights", label: "Insights" },
+    { path: "/contact", label: "Contact" },
+   
   ];
 
   return (

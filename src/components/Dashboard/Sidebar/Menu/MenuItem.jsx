@@ -7,14 +7,20 @@ const MenuItem = ({ label, address, icon: Icon }) => {
       to={address}
       end
       className={({ isActive }) =>
-        `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-          isActive ? 'bg-gray-300  text-gray-700' : 'text-gray-600'
+        `flex items-center px-4 py-3 my-2 transition-all duration-300 transform rounded-xl group ${
+          isActive
+            ? 'bg-blue-600/10 text-blue-500 border-l-4 border-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.1)]'
+            : 'text-slate-400 hover:bg-white/5 hover:text-white'
         }`
       }
     >
-      <Icon className='w-5 h-5' />
+      {/* Icon with hover scaling */}
+      <Icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110`} />
 
-      <span className='mx-4 font-medium'>{label}</span>
+      {/* Label with improved typography */}
+      <span className='mx-4 font-bold uppercase text-[11px] tracking-[0.15em]'>
+        {label}
+      </span>
     </NavLink>
   )
 }
