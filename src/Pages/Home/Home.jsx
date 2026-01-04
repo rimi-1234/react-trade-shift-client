@@ -10,6 +10,12 @@ import "swiper/css/navigation";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import Loading from "../../components/Loading/Loading";
 import NewsletterBanner from "../../components/NewsletterBanner/NewsletterBanner";
+import HowItWorks from "../../components/HowItWorks/HowItWorks";
+import GlobalImpact from "../../components/GlobalImpact/GlobalImpact";
+import { WelcomeHeader } from "../../components/WelcomeHeader/WelcomeHeader";
+import { FeaturesSection } from "../../components/FeaturesSection/FeaturesSection";
+
+
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -32,20 +38,9 @@ const Home = () => {
     <div>
   
       <HeroSlider />
+  
+      <WelcomeHeader/>
 
-      <div className="flex justify-center items-center h-60 sm:h-72 md:h-96 lg:h-[300px] bg-blue-100 px-4 sm:px-6 md:px-12 overflow-hidden">
-        <motion.h1
-          className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-transparent bg-clip-text
-            bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700 px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4 rounded-3xl text-center leading-tight sm:leading-snug md:leading-snug"
-          style={{ backgroundSize: "200% 200%", backgroundPosition }}
-          animate={{ x: 100 }}
-          transition={{
-            x: { repeat: Infinity, repeatType: "loop", duration: 3, ease: "linear" },
-          }}
-        >
-          Welcome to Our Store
-        </motion.h1>
-      </div>
 
       <section className="max-w-6xl mx-auto p-6 mt-5 text-center text-gray-700">
         <h2 className="text-2xl font-bold  dark:text-gray-400 mb-4">Latest Products</h2>
@@ -55,6 +50,47 @@ const Home = () => {
         </p>
         <LatestProducts />
       </section>
+
+      {/* 5. TRADE PROCESS STEPS */}
+      <HowItWorks />
+      <GlobalImpact />
+      <FeaturesSection/>
+
+      
+      {/* 4. GLOBAL IMPACT STATS */}
+      
+      {/* <section className="py-24 bg-base-100">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+              <h2 className="text-2xl font-bold  dark:text-gray-400 mb-4">How It Works</h2>
+           
+            <p className="text-gray-500">Simplify your import-export journey in four easy steps.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { title: "Select Product", desc: "Browse our verified global catalog." },
+              { title: "Secure Payment", desc: "Transact with multi-layer encryption." },
+              { title: "Fast Logistics", desc: "Automated customs and fast shipping." },
+              { title: "Receive Goods", desc: "Door-to-door delivery guaranteed." },
+            ].map((step, i) => (
+              <motion.div
+                key={i}
+                className="relative p-8 bg-base-200 rounded-2xl border-t-4 border-primary"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+              >
+                <span className="absolute -top-6 left-6 w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg">
+                  {i + 1}
+                </span>
+                <h4 className="text-xl font-bold mb-3 mt-4">{step.title}</h4>
+                <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section> */}
 
       {/* Best Sellers Section */}
       <section className="max-w-6xl mx-auto p-6 mt-5 text-center text-gray-700">

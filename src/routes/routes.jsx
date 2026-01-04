@@ -15,6 +15,9 @@ import AllProduct from "../Pages/AllProduct/AllProduct"
 import MyExport from "../Pages/MyExport/MyExport"
 import ProductDetails from "../Pages/ProductDetails/ProductDetails"
 import MyImports from "../Pages/MyImports/MyImports"
+import Statistics from "../Pages/Dashboard/Common/Statistics"
+import DashboardLayout from "../Layouts/DashboardLayout"
+import Profile from "../Pages/Dashboard/Common/Profile"
 
 
 const router = createBrowserRouter([
@@ -73,6 +76,35 @@ const router = createBrowserRouter([
         path: "/auth/forgot-password",
         element: <ForgotPassword ></ForgotPassword>,
       },
+    ],
+  },
+   {
+    path: '/dashboard',
+    element: (
+      <PrivateRouter>
+        <DashboardLayout />
+      </PrivateRouter>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <PrivateRouter>
+            <Statistics />
+          </PrivateRouter>
+        ),
+      },
+   
+      {
+        path: 'profile',
+        element: (
+          <PrivateRouter>
+            <Profile />
+          </PrivateRouter>
+        ),
+      },
+   
+     
     ],
   },
 

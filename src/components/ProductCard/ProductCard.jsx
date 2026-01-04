@@ -7,67 +7,59 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div
-      className="border rounded-2xl shadow-lg p-4 max-w-xs mx-auto bg-white flex flex-col h-full "
-      initial={{ opacity: 0, y: 30 }}          // start slightly below and invisible
-      animate={{ opacity: 1, y: 0 }}           // animate to visible
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      whileHover={{ scale: 1.05, y: -5 }}      // scale up and lift on hover
-      whileTap={{ scale: 0.95 }}               // click feedback
+      className="border rounded-xl shadow-sm p-3 w-full bg-white flex flex-col h-full border-gray-100 dark:border-gray-800 transition-all dark:bg-gray-900"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.05)" }}
     >
-
-
-      {/* Top Content */}
       <div className="flex-1 flex flex-col">
-        {/* Product Image */}
-        <img
-          src={image}
-          alt={name}
-          className="w-full h-48 object-contain mb-4 rounded-md"
-        />
-        <h3 className="text-lg font-semibold mb-2">{name}</h3>
-
-        {/* Origin Country */}
-        <p className="text-sm text-gray-600 mb-1">
-          <span className="font-medium">Origin:</span> {origin}
-        </p>
-
-        {/* Available Quantity */}
-        <p className="text-sm text-gray-600 mb-1">
-          <span className="font-medium">Available:</span> {quantity}
-        </p>
-
-        {/* Rating */}
-        <div className="flex items-center mb-2 text-2xl">
-          {Array.from({ length: 5 }, (_, i) => (
-            <span
-              key={i}
-              className={i < rating ? "text-yellow-400" : "text-gray-300"}
-            >
-              ★
-            </span>
-          ))}
-          <span className="ml-2 text-base text-gray-600">{rating}</span>
+        
+        {/* IMAGE CONTAINER */}
+        <div className="w-full aspect-[3/2] mb-3 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800 flex items-center justify-center">
+          <img
+            src={image}
+            alt={name}
+            // CHANGED: Added p-4 (Padding) to shrink the product size inside the box
+            // CHANGED: Switched back to object-contain so the full image is visible
+            className="w-full h-full object-contain p-4 transition-transform duration-500 hover:scale-110"
+          />
         </div>
 
+        {/* TITLE */}
+        <h3 className="text-base font-bold mb-1 line-clamp-1 leading-tight text-gray-800 dark:text-gray-100">
+          {name}
+        </h3>
 
-        {/* Price */}
-        <p className="text-red-600 font-bold text-lg mb-4">৳{price}</p>
+        {/* DETAILS */}
+        <div className="text-[11px] text-gray-500 space-y-0.5 mb-2 uppercase tracking-wider">
+          <p><span className="font-semibold text-gray-400">Origin:</span> {origin}</p>
+          <p><span className="font-semibold text-gray-400">Stock:</span> {quantity} Units</p>
+        </div>
+
+        {/* RATING */}
+        <div className="flex items-center mb-2">
+          <div className="flex text-amber-400 text-sm">
+            {Array.from({ length: 5 }, (_, i) => (
+              <span key={i}>{i < rating ? "★" : "☆"}</span>
+            ))}
+          </div>
+          <span className="ml-1 text-[10px] font-bold text-gray-400">{rating}.0</span>
+        </div>
+
+        {/* PRICE */}
+        <p className="text-red-600 font-black text-lg mb-3 mt-auto">৳{price}</p>
       </div>
 
-      {/* See Details Button aligned at the bottom */}
-      <motion.div
-        className="mt-auto w-full bg-white border border-blue-400 text-blue-500 py-2 rounded transition text-center"
-        whileHover={{ backgroundColor: "#3B82F6", color: "#fff" }}
-        whileTap={{ scale: 0.95 }}
-      >
+      {/* BUTTON */}
+      <motion.div whileTap={{ scale: 0.95 }}>
         <Link
           to={`/products-details/${_id}`}
-          className="w-full h-full block"
+          className="w-full block bg-white dark:bg-transparent border border-blue-500 text-blue-500 py-1.5 rounded-lg text-sm font-bold hover:bg-blue-500 hover:text-white transition-all text-center"
         >
           See Details
         </Link>
       </motion.div>
-
     </motion.div>
   );
 };

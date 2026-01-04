@@ -28,9 +28,9 @@ const Navbar = () => {
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/all-products", label: "All Products" },
-    { path: "/my-exports", label: "My Exports" },
     ...(user
       ? [
+          { path: "/my-exports", label: "My Exports" },
           { path: "/my-imports", label: "My Imports" },
           { path: "/add-export", label: "Add Export" },
         ]
@@ -38,28 +38,25 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1400px] z-50 backdrop-blur-md border rounded-2xl shadow-xl transition-all duration-500 bg-white/30 dark:bg-gray-800/70 border-white/40 dark:border-gray-700 text-gray-900 dark:text-white">
-      <div className="flex flex-wrap  items-center justify-between py-3 px-4 sm:px-6 lg:px-8 gap-2">
-        {/* Left: Logo + Navigation */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-          <Link
-            to="/"
-            className="text-xl sm:text-2xl md:text-3xl font-bold text-primary dark:text-white"
-          >
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1400px] z-50 backdrop-blur-md border rounded-2xl shadow-xl transition-all duration-500 bg-white/70 dark:bg-base-100/70 border-white/40 dark:border-white/10 text-base-content">
+      <div className="flex items-center justify-between py-3 px-4 sm:px-8">
+        
+        {/* Left: Logo + Desktop Links */}
+        <div className="flex items-center gap-8">
+          <Link to="/" className="text-2xl font-black tracking-tight text-primary">
             TradeShift
           </Link>
 
-          {/* Navigation Links (tablet+desktop) */}
-          <div className="hidden sm:flex items-center gap-3 flex-wrap">
+          <div className="hidden lg:flex items-center gap-2">
             {navLinks.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-sm md:text-base font-normal transition-all ${
+                  `px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-[#00AEEF] text-white shadow-md"
-                      : "hover:bg-[#00AEEF]/20 hover:text-white text-gray-700 dark:text-gray-200"
+                      ? "bg-primary text-white shadow-lg"
+                      : "hover:bg-primary/10 text-base-content"
                   }`
                 }
               >
@@ -69,103 +66,66 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Right: Theme + User (tablet+desktop) */}
-        <div className="sm:flex hidden flex-wrap justify-center md:justify-end items-center gap-4 mt-2 md:mt-0">
-          <Switch
-            checked={theme === "light"}
-            onChange={(e) => handleTheme(!e.target.checked)}
-          />
+        {/* Right: Theme + User Profile */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:block">
+             <Switch checked={theme === "light"} onChange={(e) => handleTheme(!e.target.checked)} />
+          </div>
+
           {loading ? (
-            <p>Loading...</p>
+            <span className="loading loading-spinner loading-sm text-primary"></span>
           ) : user ? (
-            <div className="flex items-center gap-3">
-              <div className="relative group">
-                <img
-                  src={user?.photoURL || userIcon}
-                  alt="User"
-                  className="w-10 h-10 rounded-full border-2 border-transparent hover:border-primary cursor-pointer transition"
-                />
-                <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-gray-800 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
-                  {user.displayName}
-                </span>
+            /* --- ADVANCED DROPDOWN MENU --- */
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar online">
+                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  <img src={user?.photoURL || userIcon} alt="Avatar" />
+                </div>
               </div>
-              <button
-                onClick={handleLogOut}
-                className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold"
-              >
-                Logout
-              </button>
+              <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-box w-52 border border-base-300">
+                <li className="menu-title text-primary">{user.displayName}</li>
+                <li><Link to="/dashboard" className="justify-between">Dashboard <span className="badge badge-primary badge-outline text-[10px]">New</span></Link></li>
+                <li><Link to="/dashboard/profile">Profile Settings</Link></li>
+                <hr className="my-2 border-base-300" />
+                <li><button onClick={handleLogOut} className="text-error font-bold">Logout</button></li>
+              </ul>
             </div>
           ) : (
-            <Link
-              to="/auth/login"
-              className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold"
-            >
-              Login/Register
+            <Link to="/auth/login" className="btn btn-primary btn-sm md:btn-md rounded-lg text-white">
+              Login
             </Link>
           )}
-        </div>
 
-        {/* Mobile / Tablet Menu Toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="sm:hidden text-3xl font-bold text-gray-900 dark:text-white p-2"
-        >
-          ☰
-        </button>
+          {/* Mobile Menu Toggle */}
+          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden btn btn-ghost btn-sm text-2xl">
+            {isOpen ? "✕" : "☰"}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile & Tablet Menu */}
+      {/* Mobile Drawer */}
       {isOpen && (
-        <div className="sm:hidden flex flex-col items-center gap-2 p-4 bg-white/40 dark:bg-gray-800/80 rounded-b-2xl border-t border-white/30 dark:border-gray-700">
-          {navLinks.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                `w-full text-center px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-[#00AEEF] text-white"
-                    : "hover:bg-[#00AEEF]/20 text-gray-800 dark:text-gray-200"
-                }`
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-
-          <Switch
-            checked={theme === "light"}
-            onChange={(e) => handleTheme(!e.target.checked)}
-          />
-
-          {user ? (
-            <div className="flex flex-col items-center gap-2 mt-2 w-full">
-              <img
-                src={user?.photoURL || userIcon}
-                alt="User"
-                className="w-10 h-10 rounded-full"
-              />
-              <span className="text-sm text-white bg-blue-500 px-3 py-1 rounded">
-                {user.displayName}
-              </span>
-              <button
-                onClick={handleLogOut}
-                className="w-full px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
+        <div className="lg:hidden p-4 bg-base-100/95 border-t border-base-300 rounded-b-2xl animate-in slide-in-from-top duration-300">
+          <div className="flex flex-col gap-2">
+            {navLinks.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `block px-4 py-3 rounded-xl text-center font-semibold ${
+                    isActive ? "bg-primary text-white" : "bg-base-200"
+                  }`
+                }
               >
-                Logout
-              </button>
+                {item.label}
+              </NavLink>
+            ))}
+            <div className="flex justify-between items-center bg-base-200 p-4 rounded-xl mt-2">
+              <span className="text-sm font-medium">Dark Mode</span>
+              <Switch checked={theme === "light"} onChange={(e) => handleTheme(!e.target.checked)} />
             </div>
-          ) : (
-            <Link
-              to="/auth/login"
-              onClick={() => setIsOpen(false)}
-              className="w-full text-center px-4 py-2 rounded-lg font-semibold bg-primary hover:bg-primary/90 text-white"
-            >
-             Login/Register
-            </Link>
-          )}
+          </div>
         </div>
       )}
     </nav>
