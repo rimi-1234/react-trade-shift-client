@@ -3,7 +3,7 @@
 **TradeShift** is a modern and responsive e-commerce web platform designed to provide a seamless online shopping experience.  
 It allows users to explore products, view detailed information, manage their accounts, and make purchases efficiently.
 
-🌐 **Live Site URL:** [https://rimi-trade-shift-1234.netlify.app/]
+🌐 **Live Site URL:** [https://react-tract-shift-client.vercel.app/]
 
 ---
 
